@@ -1,0 +1,115 @@
+% Dataset and Neo4j Usage Description
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\title{Dataset Description and Neo4j Usage for Major Project}
+\author{}
+\date{October 11, 2025}
+\begin{document}
+\maketitle
+
+\section*{Overview}
+This document describes the CSV dataset used in the project (file: \texttt{research\_csv.csv}), summarizes its schema and statistics, and explains how the data were modelled and used in Neo4j. It also lists data quality notes, limitations, and suggested preprocessing / next steps for analysis and link-prediction experiments.
+
+\section{Dataset summary}
+\begin{itemize}
+  \item Source file: \texttt{e:\\Major-Project\\research\_csv.csv}
+  \item Total rows (records): 1,691
+  \item Unique paper titles: 1,690
+  \item Unique source titles (venues): 665
+  \item Unique author name strings: 3,057
+  \item Mean authors per paper: $\approx 3.67$ (median = 3, max = 14)
+  \item Missing values: Authors = 0, Title = 0, Source title = 2
+\end{itemize}
+
+\section{Schema (columns)}
+The CSV contains the following columns (all textual):
+\begin{description}[leftmargin=!,labelwidth=3cm]
+  \item[Authors] A comma-separated list of author names for the paper (e.g. "Deena Divya Nayomi B., Mallika S.S., Sowmya T., ..."). No missing values observed. Author strings are used verbatim to create author nodes unless normalized.
+  \item[Title] The paper title (one record per paper). Example: "A Cloud-Assisted Framework Utilizing Blockchain, Machine Learning, and Artificial Intelligence to Countermeasure Phishing Attacks in Smart Cities".
+  \item[Source title] The journal or proceedings name (venue). Example: "International Journal of Intelligent Systems and Applications in Engineering". Two rows have missing venue information.
+\end{description}
+
+\section{Example rows}
+\begin{longtable}{p{0.30\linewidth} p{0.55\linewidth}}
+\toprule
+Authors & Title (shortened) \\
+\midrule
+\endhead
+
+Deena Divya Nayomi B., Mallika S.S., Sowmya T., Janardhan G., Laxmikanth P., Bhavsingh M. & A Cloud-Assisted Framework Utilizing Blockchain, Machine Learning, and Artificial Intelligence to Countermeasure Phishing Attacks in Smart Cities \\
+Murugan T., Suvitha A., Milton Boaz B. & Crystal growth, structural, optical, mechanical characterization and quantum chemical analysis by DFT of an organic nonlinear optical single crystal ... \\
+Sushma B., Pulikala A. & AAPFC-BUSnet: Hierarchical encoder–decoder based CNN with attention aggregation pyramid feature clustering for breast ultrasound image lesion segmentation \\
+Jeyanthi J.E., Samuel T.S.A., Song Y.S., Venkatesh M. & Heterostructure performance evaluation: A numerical simulation and analytical modeling of the ferroelectric pocket doped double gate tunnel FET \\
+Mathew J.C., Ilango V., Asha V. & Joint Runet++: A Joint Region-Based Unet++-Based Optic Disc and Cup Segmentation with Ensemble Generalization Loss for Glaucoma Disease Prediction \\
+\bottomrule
+\end{longtable}
+
+\section{Distributions and high-level statistics}
+\begin{itemize}
+  \item Authors per paper: mean $\approx 3.67$, median = 3, maximum = 14.
+  \item Top author name strings (by number of papers, sample): Routray S.K. (49), Javali A. (36), Arunkumar T. (36), Suvitha A. (33), Chinnaiyan R. (30). Note: these counts are based on string matching, before any disambiguation.
+  \item Top venues (sample counts): \textit{Materials Today: Proceedings} (130), \textit{Lecture Notes in Networks and Systems} (52), \textit{AIP Conference Proceedings} (49), \textit{Journal of Physics: Conference Series} (32), \textit{Lecture Notes in Electrical Engineering} (32).
+\end{itemize}
+
+\section{How the data map to the Neo4j graph}
+The project uses the labeled property graph model in Neo4j. The mapping chosen for import is:
+\begin{itemize}
+  \item Nodes:
+    \begin{itemize}
+      \item \textbf{Author} nodes: created from unique author name strings (property: \texttt{name}).
+      \item \textbf{Paper} nodes: created from unique title strings (property: \texttt{title}, optional \texttt{document\_type} when available).
+      \item \textbf{Journal} nodes: created from unique source titles (property: \texttt{name}).
+      \item \textbf{Coauthorship} nodes: one node per paper that represents the coauthorship event; properties stored include title, journal, document\_type. These nodes make multi-author papers explicit and reduce the visual and computational complexity of fully connected author cliques.
+    \end{itemize}
+  \item Relationships:
+    \begin{itemize}
+      \item (Author)-[:WROTE]->(Paper)
+      \item (Paper)-[:PUBLISHED\_IN]->(Journal)
+      \item (Author)-[:COAUTHORED]->(Coauthorship)
+    \end{itemize}
+\end{itemize}
+Import was implemented in the script \texttt{import\_to\_neo4j.py} (Python, official Neo4j driver). The import uses \texttt{MERGE} to make the process idempotent.
+
+\section{Graph algorithms and analyses performed}
+\begin{itemize}
+  \item Community detection: the Graph Data Science (GDS) library (Louvain or Label Propagation) was used on a projected author graph to compute community assignments (written to \texttt{Author.communityId}).
+  \item Link-prediction / similarity experiments: an export to Python was used (script \texttt{predict\_coauthorship.py}). Authors were represented by binary feature vectors (one-hot over papers and journals they appeared in), and pairwise similarities were computed with Cosine and Jaccard measures; results were averaged to rank likely future collaborations.
+\end{itemize}
+
+\section{Data quality notes and limitations}
+\begin{enumerate}
+  \item \textbf{Name ambiguity:} author nodes are created from free-text name strings. The dataset lacks a canonical author identifier (ORCID), so different name variants for the same person will be treated as distinct nodes unless normalized.
+  \item \textbf{Temporal information:} the CSV does not include publication year in the visible columns. Without timestamps, rigorous temporal train/test splits for link prediction are not possible.
+  \item \textbf{Venue heterogeneity:} entries mix journals and conference proceedings; normalizing venue names may be desirable.
+  \item \textbf{Duplicate/near-duplicate titles:} there is one exact duplicate title; near-duplicates are possible and should be reviewed if deduplication is required.
+  \item \textbf{Author splitting:} authors are split on commas; this works for this CSV but can break on unusual name formats. The CSV largely uses quoted multi-author fields, which mitigates some splitting issues.
+\end{enumerate}
+
+\section{Suggested preprocessing steps}
+\begin{enumerate}
+  \item Normalize author names: lowercasing, strip punctuation, normalize initials and whitespace; optionally run fuzzy-clustering to merge obvious duplicates.
+  \item Normalize venue names (map common variants to canonical names).
+  \item Add timestamps (year) if available from source metadata to enable temporal evaluation of link prediction.
+  \item Optionally create canonical author IDs (manual mapping, ORCID lookup, or fuzzy matching).
+\end{enumerate}
+
+\section{Practical next steps for modeling}
+\begin{itemize}
+  \item Use GDS-built graph projections and algorithms: run Louvain, FastRP or node2vec to get author embeddings, then use embedding similarity or supervised learning for link prediction.
+  \item Create an evaluation split (temporal holdout) to measure precision/AUC of predicted links.
+  \item Clean name variants before re-importing to reduce noise in communities and link predictions.
+\end{itemize}
+
+\section*{Appendix: scripts referenced}
+\begin{itemize}
+  \item \texttt{import\_to\_neo4j.py} -- reads the CSV and creates nodes and relationships in Neo4j (Authors, Papers, Journals, Coauthorship nodes and edges).
+  \item \texttt{predict\_coauthorship.py} -- exports author-paper-journal data, builds binary feature vectors, computes Cosine and Jaccard similarity, and writes ranked predictions to \texttt{predicted\_coauthorships.csv}.
+\end{itemize}
+
+\end{document}

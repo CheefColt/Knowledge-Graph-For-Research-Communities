@@ -1,0 +1,25 @@
+COMPLETE METRICS REPORT
+============================================================
+
+GRAPH STATISTICS:
+Author nodes: 6057
+Paper nodes: 1753
+Journal nodes: 668
+Coauthorship nodes: 1691
+WROTE relationships: 12343
+PUBLISHED_IN relationships: 1756
+COAUTHORED relationships: 12255
+
+Mean authors per paper: 3.67
+Median authors per paper: 3.0
+
+COMMUNITY STATISTICS:
+Number of communities: 166
+Largest community: 155
+Mean community size: 18.42
+
+LINK PREDICTION METRICS:
+Total pairs: 1048575
+Cosine mean: 0.0300
+Jaccard mean: 0.0176
+Average score mean: 0.0238
