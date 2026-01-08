@@ -1,0 +1,181 @@
+A paper on KG completion technique surveyed several methods to find missing entities and relationships.
+It covered the traditional methods such as Probabilistic methods, rule-based methods and also delved into 
+modern approaches such as TransE and neural embeddings. The TransE based approach representes entities 
+as vectors in the embedding sapce. It offers an alternative to the similarity-based link prediction capturing
+more nuanced patterns. The paper also critiques evaluation metrics such as Mean Reciprocal Rank which gave us
+the idea of adopting a temporal holdout where predictions based on historical data are verified
+against future publications. 
+
+Pujara et al's paper deals with tranforming noisy graphs into consistent KG through knowledge graph
+identification (KGI) by making using og Probabilistic Soft Logic. It allows to perform refining steps like
+entity Resolution, relation inference and structural correction. This work is relevant to our system's challenge 
+of messy metadata where authour names appear in multiple formats, suggesting an approach that reasons about
+entity identity using contextual evidence than just string matching. This joint inference of solving entity 
+resolution and relationship discovery simultaneously improves collaboration netwrok accuracy by figuring out 
+author identities and their co-authorship patterns in tandem.
+
+From reading a paper on domain-specific knowledge construction for remote sensing we gathered an intersting
+idea of a layered architecture which seperates the ontology constructed from data layer and mapping that data to 
+relation databases for SPARQL querying and Neo4j visualization. This approach was relevant to our system as it 
+demonstrates the importance of formally defining domain concepts providing guidance for extending the implicit Neo4j
+schema. This dual-interface approach combining SPARQL for complex queries with Neo4j as a visulization tool
+suggests enchancing the system's usuability for both technical users and domain experts.
+
+
+The KnowEdu system by Pan et al. constrcuts educational KG using neural sequence labelling for concept extraction
+and probabilistic association rule mining. This achieved an F1 score \> 0.70 and AUC \> 0.90. We have infered that the
+parallel between educational prerequisite discovery and academic collaboration prediction is evident - both infer non-obvious
+connections from observable data rather than requiring labeled explicit declarations. This unique approach
+of combining structured data with behavioural data enhances our predicitons, by identifying researchers who pubilsh
+in progressively overlapping conferences over time as trajectory indicators for future collaboration.
+
+In order to get a wider understanding we researched into Social Networks which are the foundation networks
+for understanding information and influence propogation. Gera and Sinha's paper on Influence Dynamics in Social Networks
+introduces centraility measures and cluster isolation concepts for examining social structures. Their emphasis on 
+centrality measures helped identifying influential researchers who not only belong to a cluster but also serve as connectors between 
+communities. Their cluter isolation concepts are particularly relevant to our approach for community detection, 
+encouraging analysis beyond mere connectivity to understand subfields and emerging interdisciplinary areas in communities.
+
+Ali et al.'s paper talks about structured taxonomy of citation recommendation approaches across what is known
+as the seven dimensions. This taxonomy demonstrates how effective recommendation systems can take advantage of multi-hop relationships
+going beyond similarity patterns, thereby offering insights into capturing higher-order structural patterns. This framework validates our
+design choice and could be augmented with embedding-based approaches to discover nuanced patterns.
+
+We have also explored the application of the latest trend, Machine Learning (ML) and Natural Language Processing (NLP), in KG and found that Verma et al have
+covered this topic in a comprehensive review. This review descibed how ML and NLP are used throughout the lifecycle of Scholarly Knowledge Graphs (SKGs) providing
+both a historical perspective and a forward-looking analysis. Thier recognition that SKGs server dual purpose alings with our project's goals
+of being able to perform both community detection and link predicition. The discussion of hybrid approaches by combining
+structured metadata with text mining, such as extracting research topics from paper abstracts, incorporating semantic similarity alongside
+publication patterns. This had led to making predictions more meaningful by identifying complementary expertise.
+
+Wang et al.'s Knowldege-Aware Path Recurrent Network (KPRN) utilizes path-based reasoning for paper recommendation, perceiving that meaningful connections in 
+KGs manifest through relationship chains rather than simple pairwise comparisions, enabling valuable insights via multi-hop relationships. By making use of bidirectional
+breadth-first search, their approach identifies potential collaborations through paths connecting researchers via shared collaborators and overlapping venue ecosystems.
+Another important feature of their work is that they integrate the user preferences, thereby personalizing 
+predictions based on individual researcher collaboration patterns. Incorporating such feature would benefit us in the future enhancement of the project.
+
+For the simplicity and interpretability of the project, we have scaled down the complexity and adhered to similarity-based approach. To be future proof
+we have reviewed some papers to understand the enhancements that can me made, and in the effort to do so have discovered 
+Kejriwal's practical review on computer science knowledge graphs. This paper discuess the challenges of deployging KG systems at scale, covering schema 
+evolution and data quality monitoring, these are directly applicable to maintaining our Neo4j database. The discussion of semantic reasoning capabilities
+reveals oppurtunities for enabling transitive reasoning, and thus being able to identify indirect researcher awareness. The emphasis on
+temporal analysis also aids us in supporting the identification of emerging communities.
+
+In the lines of enhancing our system, we also looked at the framework that is described by Liu et al. as Evolving Knowldege Graph Embedding (EKGE). It incorporates 
+mulitple-attention mechanisms for citation recommendation by weighting different connection types based on context rather than treating relationships uniformly. Their correct 
+recognition that KGs evolve over time, with relation importance shifting across context, offers valuable insights for enhancing our link prediction system
+where factors driving collaborations vary substantially. They provide a practical model for maintaining prediction accuracy as the collaboration network evolves with 
+researchers changing institution or developing new interests.
+
+METHODOLOGY
+
+We developed a graph-based analytical system to analyze research collaboration networks from biliographic metadata. Our technique involves transforming publication
+records into knowledge graph representation with authors, papers, and conferences as interconnected entities. It enabled us to carry out automated community detection
+and collaboration prediction through graph algorithms and similarity metrics. The system follows a modular pipeline architecture consisting of
+data processing, graph construction, network analysis, and interactive querying, designed to reveal hidden collaboration patterns and predict future research partnerships.
+
+Bibliographic metadata of a single institution with its research domain was utilized in our analysis. The datset encompasses 3,057 unique authors and 
+665 distinct publication venues (journals and conferences), with each record containing authors, paper-titles, publication source identifiers, year of publication. The collaboration
+has patterns such as 3.67 authors per paper, ranging from single-source author works to papers with 14 co-authours. This dataset was sufficiently dense for meaningful graph analysis, the
+other reasons to select this dataset is to focus on a cohesive research ecosystem while maintaining tractability for our proposed system.
+
+Data Preprocssing Pipeline
+
+
+
+The report is structured to into chapters, starting with chapter 1 which establishes the background, motivation, objective, and scope of the project.
+Chapter 2 is a complete literature review on KG construction, completion techniques, and new methods from which we formed ideas for our system. Then,
+in chapter 3 we propose the model including the system architecture, dataset characteristics, and technology used. Chapter 4 discusses in detail the
+implementation steps we followed covering data preprocessing, Neo4j graph construction, community detection results, link prediction outcomes, and visulization
+of different relationships between enities. All the results are then discussed in chapter 5. For a better understanding of how Neo4j works, sample
+cypher queries are presented in chapter 6 demonstrating extraction capabilities of Neo4j for exploring communities and collaboration paths. Finally, in chapter 7
+we conclude by summarizing outcomes and contributions, discuss limitations, and outline future research directons.
+
+
+
+
+METHODOLOGY
+
+To ensure consistency the raw data was normalized in a multi-stage pipeline.  Author names were processed as:
+1) splitting comma-seperated strings into individual names, 2) whitespace stripping and consolidation, 3) trailing periods removal
+4) Title Case conversion, 5) filtering empty strings. To ensure Cypher query Language compatability and to prevent
+injection vulnarabilities, Paper titles and Venue names received special character escaping. And finally to maintain dataset
+completeness we handled missing venue information by substituting empty strings. The outcome of this preprocessing step was
+clean entity lists validated for uniqueness before importing to database.
+
+
+Graph Database Construction
+
+After a decent amount of research, we concluded to go with Neo4j as our graph database platform. It has a native
+graph storage model with index-free adjacency, this provided us with the essential traversal operations in collaboration
+path discovery and community detection. The graph schema enforces four node types: 1) Author, 2) Paper, 3) Journal, 4) Coauthorship.
+Relationships include PUBLISHED_IN (Paper -> Journal) and COAUTHORED (Author->Coauthorship<-Author in a star pattern).
+To prevent duplicate node creation, we enabled idempotent MERGE operations during import. To accelerate the MATCH operations,
+we used B-tree indexes created on name and title properties, which effectively reduces time complexity from O(n) to O(log n).
+he final graph contains 7,104 nodes and 14,109 relationships, imported in approximately 12 minutes using the Python neo4j-driver with batch transactions.
+
+Community Detection
+
+For community detection we used Neo4j's native Louvain algorithm that is available in the Graph Data Science library.
+It helped identify clusters of frequently collaborating authors, it does so by iterative modularity optimization.
+The modularity Q measures density of connections within communities to random networks: \begin{equation}
+Q = \frac{1}{2m} \sum_{i,j} \left[ A_{ij} - \frac{k_i k_j}{2m} \right] \delta(c_i, c_j)
+\end{equation} where $A_{ij}$ represents the adjacency matrix, $k_i$ is the degree of node $i$, $m$ is the total number of edges, and $\delta(c_i, c_j) = 1$ if nodes $i$ and $j$ belong to the same community.
+Since collaboration is inherently symmetric, we projected COAUTHORED relationships as undirected edges. Executed the 
+algorithm with default parameters, and wrote community identifiers back to Author nodes as properties. Through the analysis, we were
+able to uncover 847 commuinites with a modularity score of 0.73, this indicates a strong community structure.
+
+Linked Prediction Methodology
+
+To predict future collaboration between author pairs who have not yet collaborated, we computed hybrid similarity scores.
+Our feature engineering approach represents each author as a binary vector encoding thier publication set and venue set.
+It was constructed using the scikit-learns MultiLabelBinarizer, where each dimension akin to a unique paper or journ with 
+value 1 if author publishe there, 0 otherwise. We computed two complementary similarity metrics:
+
+\textbf{Cosine Similarity} measures the angular distance between feature vectors:
+\[ \cos(A, B) = \frac{A \cdot B}{\|A\| \cdot \|B\|} \]
+
+\textbf{Jaccard Similarity} quantifies set overlap:
+\[ J(A, B) = \frac{|A \cap B|}{|A \cup B|} \]
+
+\textbf{Hybrid Score} combines both metrics:
+\[ S_{hybrid}(A, B) = \frac{\cos(A, B) + J(A, B)}{2} \]
+
+Cosine similarity handles high-dimensional sparse vectors which is very common in bibliographic data.
+Jaccard similarity provides intuitive interpretation of shared publication patterns. 
+Their individual strength when combined gave us a more refined metric and hence we selected this hybrid approach.
+Author pairs were ranked by descending hybrid scores, high-scoring pairs were validated by analyzing shared publication
+venues, community membership overlap, and temporal publication patterns to assess prediction plausibility.
+
+Implementaion Details
+
+The system was implemented using Python 3.10 with Neo4j 5.13 Community Edition. The implementation was divided clearly into modules.
+The five primary modules being: 1) clean.py which handled CSV parsing, author name normalization and data validation. 2) import_to_neo4j.py, is the graph
+import module and it managed then Neo4j connection, schema creation, and bulk data insertion using idempotent MERGE operations. 3) neo4j_style_networkx.py, the community 
+detection module interfaces with Neo4j's Graph Data Science library to execute the Louvain algorithm. 4) predict_coauthorship.py, which constructs feature matrices, calculates 
+the hybrid scores, and generates ranked collaboration predictions. 5) Finally, the query interface module in Neo4j, where Cypher queries can be written in the command-line
+interface for interactive exploration.
+
+Results
+
+In this section, we discuss some of the outcomes that we have been able to achieve after creating the proposed system. Various subsets of the knowledge graphs
+were obtained using specific queries in the Neo4j browser interface. We were also able to derive some statistics of the institutional publication dataset. Through our
+analysis we yielded the following key findings:
+
+Author degree follows the typical distribution of an academic network, where few prolific authors produce many papers while most authors have a modest output.
+The prolific authors act as central hubs in the collaboration network, bridging otherwise isolated research groups.
+
+Publication venues vary widely in their contribution to the dataset.
+
+The high volume of conference proceedings emphasizes that the dataset is oriented towards engineering and computer science, where publishing in conferences is common.
+
+The distribution is indicative of the predominance of collaborative research pattern, with only $12.7%$ of publications being single-authored. The majority of the papers
+involve multiple authors, which highlights the importace of teamwork and co-authorship in the research process. In addition, the observation of average of $3.67$ authors per paper
+justfies the collaboration norms in engineering and computer science disciplines, where research problems require contributions from multiple domains with complementary expertise.
+
+These characteristics our algorithms a robust foundation as the dense interconnectednes allows for clear identification of modular clusters based on shared publication history.
+
+From the table TABLE~\ref{tab:community_detection}, we can see the high modularity score of $0.73$ which indicates a strong community strucutre. Authors within communities
+collaborate much more densely than would be expected by chance.
+The presense of 312 isolated authors $(36.8\%)$ indicates that a substantial proportion of researchers in dataset do not actively participate in collaboration. These isolated nodes likely represent single-paper contributors or authors whose collaborations are from cross-institutional or external collaborations.
+ 

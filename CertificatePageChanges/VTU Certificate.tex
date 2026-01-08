@@ -1,0 +1,69 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{background}
+\usetikzlibrary{calc}
+\usepackage[margin=1in,left=1.5in,includefoot]{geometry}
+\thispagestyle{empty}
+\backgroundsetup{
+scale=.8,
+angle=0,
+firstpage=true,
+opacity=0.1,
+color=black,
+contents={\begin{tikzpicture}[remember picture,overlay]
+		\node at ([yshift=10pt,xshift=18pt]current page.center)
+		{\includegraphics[width=10cm]{New logo.png}};
+		\end{tikzpicture}}
+		}
+
+\begin{document}
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[line width = 2pt] ($(current page.north west) + (1in,-0.5in)$) rectangle ($(current page.south east) + (-0.5in,0.5in)$);
+  \end{tikzpicture}
+ \begin{center}
+ \large {\textbf{CMR Institute of Technology}} \\
+ \scriptsize{AECS Layout, Bengaluru-560037} \\
+ \normalsize{\textbf{Department of Information Science and Engineering}}\\
+ \vspace{0.2in}
+ \includegraphics[scale=0.3]{New logo.png}\\
+ \vspace{0.2in}
+ \large{\textbf{CERTIFICATE}}\\
+ \vspace{0.01in}
+ \end{center}
+ 
+Certified that the project work entitled \textbf{"XXXXXXXXXXX"} is a bone fide work carried out by\\
+\begin{tabular}{l l l}
+\textbf{xxxxxxxxx}  & \hspace{3in} \textbf{1CR20ISxxx}\\
+\textbf{xxxxxxxxx}  & \hspace{3in} \textbf{1CR20ISxxx}\\
+\textbf{xxxxxxxxx}  & \hspace{3in} \textbf{1CR20ISxxx}\\
+\textbf{xxxxxxxxx}  & \hspace{3in} \textbf{1CR20ISxxx}\\
+\end{tabular}\\
+
+in partial fulfillment for the award of Bachelor of Engineering in Information Science and Engineering of the Visvesvaraya Technological University, Belgaum during the year 2025-2026. It is certified that all corrections/suggestions indicated for internal assessment have been incorporated in the report deposited in the department library.The project report has been approved as it is satisfied the academic requirements in respect of project work prescribed for the said Degree.\\
+\\
+\\
+\vspace{0.01in}
+\begin{center}
+\begin{tabular}{c c c}
+\textbf{Name of Guide} & \hspace{2cm} \textbf{} & \hspace{1.5cm} \textbf{Dr. Jagadishwari V}\\
+Project Guide & \hspace{2cm}   & \hspace{1.5cm} Head of the Department\\
+\end{tabular}\\
+\end{center}
+
+\vfill
+
+\noindent
+\textbf{External Viva}\\
+\vspace{0.2in}
+
+\noindent
+\begin{tabular}{@{}l@{\hspace{3in}}l@{}}
+\textbf{External Examiners} & \textbf{Signature with Date}\\
+\\
+1. & 1. \\
+\\
+2. & 2. \\
+\end{tabular}
+
+\end{document}

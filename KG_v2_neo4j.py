@@ -16,15 +16,18 @@ def clean_author(author):
     return author
 
 def import_csv_to_neo4j(uri, user, password, csv_file):
-    # Read CSV, handle missing Document Type column
+    # Read CSV, handle missing Document Type and Year columns
     try:
-        df = pd.read_csv(csv_file, encoding='ISO-8859-1', usecols=['Authors', 'Title', 'Source title', 'Document Type'])
+        df = pd.read_csv(csv_file, encoding='ISO-8859-1', usecols=['Authors', 'Title', 'Source title', 'Document Type', 'Year'])
     except Exception as e:
         print('Error reading with usecols:', e)
         df = pd.read_csv(csv_file, encoding='ISO-8859-1')
         # Add Document Type column if it doesn't exist
         if 'Document Type' not in df.columns:
             df['Document Type'] = 'Unknown'
+        # Add Year column if it doesn't exist
+        if 'Year' not in df.columns:
+            df['Year'] = 'Unknown'
     print('DataFrame columns:', df.columns)
 
     # Use exact column names from DataFrame
@@ -51,15 +54,26 @@ def import_csv_to_neo4j(uri, user, password, csv_file):
             title = str(row['Title']).replace("'", "\\'")
             journal = str(row['Source title']).replace("'", "\\'")
             doc_type = str(row['Document Type']).replace("'", "\\'")
+            year = str(row['Year']).replace("'", "\\'")
 
-            # Create Paper node
-            session.run(f"MERGE (p:Paper {{title: '{title}'}})")
+            # Create Paper node with year property
+            session.run(f"MERGE (p:Paper {{title: '{title}', year: '{year}'}})")
 
             # Create Journal node
             session.run(f"MERGE (j:Journal {{name: '{journal}'}})")
 
             # Create DocumentType node
             session.run(f"MERGE (d:DocumentType {{type: '{doc_type}'}})")
+
+            # Create Year node for year-wise analysis
+            session.run(f"MERGE (y:Year {{value: '{year}'}})")
+
+            # Link Paper to Year
+            session.run(f"""
+                MATCH (p:Paper {{title: '{title}'}})
+                MATCH (y:Year {{value: '{year}'}})
+                MERGE (p)-[:PUBLISHED_IN_YEAR]->(y)
+            """)
 
             # Link Paper to Journal
             session.run(f"""

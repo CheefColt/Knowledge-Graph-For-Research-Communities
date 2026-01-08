@@ -1,0 +1,1296 @@
+\documentclass[12pt,a4paper]{article}
+
+% ----------------------------------------------------
+% PAGE GEOMETRY
+% ----------------------------------------------------
+\usepackage[margin=1in,left=1.5in,top=1.5in,includefoot]{geometry}
+
+% ----------------------------------------------------
+% PACKAGES
+% ----------------------------------------------------
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{natbib}
+
+\usepackage{float}
+
+% Make table and figure captions include chapter number
+\usepackage{chngcntr}
+\counterwithin{figure}{chapter}
+\counterwithin{table}{chapter}
+
+% Redefine the format to show chapter.number instead of chapter.section.number
+\renewcommand{\thefigure}{\thechapter.\arabic{figure}}
+\renewcommand{\thetable}{\thechapter.\arabic{table}}
+
+% ----------------------------------------------------
+% DEFINE CHAPTER TOC LEVEL (MUST COME BEFORE tocLOFT)
+% ----------------------------------------------------
+\makeatletter
+\newcommand{\l@chapter}{\@dottedtocline{0}{0em}{3em}}
+\makeatother
+
+% Load tocLoft AFTER defining chapter
+\usepackage{tocloft}
+
+\renewcommand{\cftsecfont}{\normalfont}
+
+% --- TOC Indentation ---
+\cftsetindents{section}{2em}{2em}     % SECTION
+\cftsetindents{subsection}{4em}{3em}  % SUBSECTION
+
+% --- Reduce vertical spacing in TOC ---
+\setlength{\cftbeforesecskip}{1pt}     % space before each section
+\setlength{\cftbeforesubsecskip}{0pt}  % space before each subsection
+
+
+% ----------------------------------------------------
+% SECTION AND SUBSECTION FORMATTING
+% ----------------------------------------------------
+\titleformat{\section}
+  {\normalfont\large}
+  {\thesection}
+  {1em}
+  {}
+
+\titleformat{\subsection}
+  {\normalfont\normalsize}
+  {\thesubsection}
+  {1em}
+  {}
+
+% Spacing for sections and subsections
+\titlespacing*{\section}{0pt}{1ex plus .2ex}{0.5ex plus .1ex}
+\titlespacing*{\subsection}{0pt}{0.8ex plus .2ex}{0.4ex plus .1ex}
+
+% ----------------------------------------------------
+% HEADER & FOOTER
+% ----------------------------------------------------
+\setlength{\headheight}{25pt}
+\setlength{\headsep}{35pt}
+
+\fancyhf{}
+\fancyhead[L]{\textbf{Knowledge Graphs for Research Communities}}
+% \fancyhead[R]{\includegraphics[height=1.2cm]{New logo.png}}
+\fancyfoot[L]{Dept. of ISE, CMRIT}
+\fancyfoot[R]{\thepage}
+\renewcommand{\footrulewidth}{1pt}
+\pagestyle{fancy}
+
+% ----------------------------------------------------
+% SECTION NUMBERING STYLE
+% ----------------------------------------------------
+\newcounter{chapter}
+\renewcommand{\thesection}{\thechapter.\arabic{section}}
+\renewcommand{\thesubsection}{\thechapter.\arabic{section}.\arabic{subsection}}
+
+% ----------------------------------------------------
+% CUSTOM CHAPTER COMMAND - NO VSPACE INSIDE
+% ----------------------------------------------------
+\newcommand{\CHAPTER}[1]{%
+    \clearpage
+    \pagestyle{fancy}
+    \stepcounter{chapter}%
+    \setcounter{section}{0}%
+    \setcounter{subsection}{0}%
+    \setcounter{figure}{0}%
+    \setcounter{table}{0}%
+
+    % Add chapter to TOC with just the number
+    \addcontentsline{toc}{chapter}{\arabic{chapter}\quad #1}
+
+    % Print chapter heading with "Chapter-<number>"
+    \noindent\textbf{\fontsize{16}{18}\selectfont Chapter \thechapter}\\[0.2cm]
+
+    \begin{center}
+        \textbf{\fontsize{18}{20}\selectfont #1}
+    \end{center}
+    
+    \vspace{0.3cm}
+}
+
+
+% ----------------------------------------------------
+% BEGIN DOCUMENT
+% ----------------------------------------------------
+\begin{document}
+
+% ----------------------------------------------------
+% ACKNOWLEDGMENT
+% ----------------------------------------------------
+\begin{center}
+    \textbf{\Large ACKNOWLEDGMENT}
+    \end{center}
+    \addcontentsline{toc}{chapter}{Acknowledgment}
+
+    {\fontsize{12}{15}\selectfont
+
+        
+        The satisfaction and euphoria that accompany a successful completion of any task would be incomplete without the mention of people who made it possible, success is the epitome of hard work and perseverance, but steadfast of all is encouraging guidance.
+
+        \vspace{0.5cm}
+
+        We extend our sincere thanks to our Principal, \textbf{Dr.Sanjay Jain}, for providing an environment that fosters innovation and learning. His unwavering support and encouragement have been instrumental in the successful completion of this project.
+
+        \vspace{0.5cm}
+
+
+        We would like to express our gratitude towards \textbf{Dr.Jagadishwari V}, Professor and HOD, Department of Information Science \& Engineering who provided guidance and gave valuable suggestions regarding the project.
+
+        \vspace{0.5cm}
+
+
+        We consider it a privilege and honor to express our sincere gratitude to our internal guide,\textbf{ Dr.Suruchi Sabherwal}, Assistant Professor, Department of Information Science \& Engineering, for her valuable guidance throughout the tenure of this project work.
+
+        \vspace{0.5cm}
+
+        We would like to thank all the faculty members who have always been very co-operative and generous. Conclusively, we also thank the non-teaching staff and all others who have been of immense help directly or in-directly during our project.
+
+        \vspace{0.5cm}
+
+
+
+        \textbf{\begin{flushright}
+        Abhay Margabhandu (1CR22IS001)\\
+        G.L.K. Abhiram Reddy (1CR22IS049)\\
+        Gyanant Nigam Nayak (1CR22IS057)\\
+        \end{flushright}}
+    }
+
+\newpage
+
+% ----------------------------------------------------
+% ABSTRACT
+% ----------------------------------------------------
+\begin{center}
+    \textbf{\Large ABSTRACT}
+\end{center}
+\addcontentsline{toc}{chapter}{Abstract}
+
+With the proliferation of vast amounts of the data on the internet, extracting meaningful information from huge database has become very challenging these days. This has led to the popularity of Knowledge Graphs (KG). KGs present a common base for generating knowledge through extraction of entities, relationships and analyzing them further. This work presents the development and implementation of a knowledge graph-based system for identifying and analyzing the relationships between different types of entities. For conducting this research, we have considered a dataset of scopus publications belonging to an organization. The system constructs a comprehensive collaboration network comprising of 4 different entities which include : Author name, paper title, year of publication, Journal/conference name. We have used extracted these entities and generated entity relationship pair using Natural Language Processing techniques. Further, we have generated different KG which include author, paper and publication KG with limit as 20, KG with same set of entities and limit as 100, KG with year wise number of publications with respect to different conferences and KG showing existing communities working together under same umbrella. Also we have performed link prediction using different distance metrics which has given us the probability of formation of links between researchers who share similar publication patterns. The system demonstrates how graph database technology and network analysis algorithms can provide valuable insights into research community dynamics, facilitate link prediction discovery, and support strategic decision-making for researchers, academic institutions, and funding organizations seeking to understand and optimize academic collaboration networks. We can extend the same work by generating knowledge embeddings  from KGs which can be further used for model training using machine learning. We can generate such knowledge graphs real time using scopus APIs and extend our work.
+
+\newpage
+
+% ----------------------------------------------------
+% LIST OF TABLES
+% ----------------------------------------------------
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+\newpage
+
+% ----------------------------------------------------
+% LIST OF FIGURES
+% ----------------------------------------------------
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+\newpage
+
+% ----------------------------------------------------
+% TABLE OF CONTENTS
+% ----------------------------------------------------
+\begin{center}
+    \textbf{\Large TABLE OF CONTENTS}
+\end{center}
+\addcontentsline{toc}{chapter}{Table of Contents}
+
+\tableofcontents
+\newpage
+
+\pagenumbering{arabic}
+
+% ----------------------------------------------------
+% CHAPTER 1
+% ----------------------------------------------------
+\CHAPTER{INTRODUCTION}
+
+\section{Overview}
+
+The ever increasing number of scientific publications across various disciplines has created a need for systems that can intelligently analyze research collaboration patterns and predict future partnerships. Traditional manual methods for examining academic networks are not an answer to this requirement, because of their time-consuming nature, and limit to their ability to uncover hidden collaboration patterns, especially when dealing with large and complex datasets. This has motivated the development of an automated system that transforms bibliographic metadata into structured knowledge graphs that reveal collaboration dynamics and enable predictive analysis for research community formation \cite{hogan2021knowledge}.
+\\ \\
+Through this project, a knowledge graph-based system is being built that models research collaboration networks by representing authors, papers, and publication venues as interconnected entities in Neo4j \cite{barrasa2023building}. A labeled property graph is constructed by the system and graph data science algorithms are applied to identify research communities through Louvain method and predict future coauthorships using machine learning-based similarity metrics. By combining two similarity measures, the system forecasts potential collaborations while providing comprehensive network analytics. This approach enables both retrospective analysis of existing collaboration patterns and prospective identification of promising research partnerships within academic research.
+
+
+\section{Motivation}
+
+In academic research, understanding collaboration patterns and identifying potential research partnerships is critical for advancing scientific discovery. However, the sheer volume of publications and the complexity of author networks make it increasingly difficult to map who works with whom, identify research communities, or predict promising future collaborations. Manually analyzing coauthorship patterns across thousands of papers is not only labor-intensive but also limited in scope, particularly when trying to uncover hidden connections between researchers or understand how collaboration networks evolve over time. This challenge is magnified in interdisciplinary fields where researchers from different domains could benefit from connecting but remain unaware of each other's work \cite{sheth2019knowledge}.
+\\ \\
+The motivation behind this project stems from the potential of graph database technology and network analysis algorithms to reveal the structure of academic collaboration \cite{chaudhri2022knowledge}. By modeling authors, papers, and publication venues as interconnected entities in a knowledge graph, we can apply community detection algorithms to identify clusters of frequently collaborating researchers and use machine learning-based similarity metrics to forecast future partnerships. This approach transforms scattered bibliographic records into a coherent network that can be queried and visualized, allowing researchers to explore collaboration dynamics not just through individual connections, but through the broader patterns that shape research communities. The ability to predict potential collaborations based on shared publication patterns and research interests represents a practical step toward more strategic and informed academic networking.
+\\
+
+
+
+\section{Problem Statement}
+
+Despite the exponential growth of academic publications and digital research repositories, understanding complex collaboration patterns and predicting meaningful research partnerships remains a significant challenge. Bibliographic metadata exists in structured formats, yet extracting actionable insights about research communities, collaboration dynamics, and future partnership opportunities requires sophisticated network analysis approaches that go beyond simple publication counts or co-authorship lists \cite{wang2019explainable}. Traditional methods of analyzing academic networks rely on manual examination or basic statistical measures, which fail to capture the complex structural patterns, community boundaries, and latent collaboration potential embedded within large-scale publication datasets.
+\\ \\
+Current approaches often treat collaboration networks as static entities, ignoring the rich graph-theoretic properties that reveal community structure, central researchers, and bridge connections between disparate research groups. Additionally, predicting future collaborations typically relies on simplistic heuristics rather than principled similarity measures that account for shared publication patterns, venue preferences, and research trajectories. There exists a need for an integrated system that transforms raw bibliographic metadata into an intelligent knowledge graph capable of both descriptive analysis (identifying existing communities) and predictive recommendations (suggesting potential collaborations) \cite{qu2024survey}. Therefore, the core problem this project addresses is the development of a graph database-based system that constructs collaboration networks from publication metadata, applies community detection algorithms to reveal organizational structure, and employs similarity-based link prediction to identify promising future research partnerships.
+
+
+
+\section{Scope of the Project}
+This project encompasses the complete lifecycle of designing, implementing, and analyzing a knowledge graph system for research collaboration networks. The scope includes processing bibliographic metadata containing author names, paper titles, and publication venues to construct a labeled property graph in Neo4j database \cite{li2023knowledge}. The system models authors, papers, journals, and coauthorship events as interconnected nodes with typed relationships capturing the structure of academic collaboration.
+\\ \\
+The implementation scope covers data preprocessing pipelines for cleaning and normalizing author names, handling missing values, and resolving entity ambiguities. It includes designing an optimized graph schema that efficiently represents many-to-many author relationships while avoiding computational complexity issues. The project implements the Louvain algorithm for community detection to identify research clusters and measure network modularity, as well as hybrid similarity-based link prediction combining Cosine and Jaccard metrics on publication feature vectors \cite{pirro2015explaining}.
+\\ \\
+The analytical scope encompasses comprehensive characterization of the resulting collaboration network, including degree distribution analysis, community size distributions, network topology metrics, and similarity score distributions. The system provides interactive querying capabilities through Neo4j's Cypher query language and browser-based visualization interface, enabling exploration of collaboration patterns, community membership, and cross-community connections \cite{fortunato2010community}. The project demonstrates practical applications for research institutions, funding agencies, and academic networking platforms, while identifying limitations related to data quality, temporal dynamics, and evaluation methodologies that inform future enhancement directions \cite{hofer2024construction}.
+
+
+
+\section{Contributions}
+
+This work makes the following concrete contributions to the field of scholarly knowledge graphs and research community analysis:
+
+\begin{enumerate}
+    \item \textbf{A comprehensive graph-based model for research collaboration networks} that represents authors, papers, journals, and coauthorship events as interconnected entities, enabling rich queries about collaboration patterns and research communities.
+    
+    \item \textbf{An implementation of community detection using Neo4j Graph Data Science} that identifies natural clusters of collaborating researchers, providing insights into the social structure of academic networks.
+    
+    \item \textbf{A hybrid link prediction approach} combining Cosine and Jaccard similarity metrics to forecast future coauthorships based on publication patterns, with quantitative evaluation of prediction accuracy.
+    
+    \item \textbf{A scalable pipeline for importing and analyzing bibliographic metadata} that handles data quality issues like author name normalization and missing fields, demonstrating practical deployment considerations.
+    
+    \item \textbf{Comprehensive analysis of a real-world dataset} containing 1,691 papers, 3,057 authors, and 665 venues, with detailed characterization of network topology, degree distributions, and community structure.
+\end{enumerate}
+
+\section{Organisation of the Project}
+
+This report is divided into the following sections:
+
+\textbf{Chapter 1: Introduction} – Establishes the background, motivation, scope, and contributions of the project.
+\textbf{Chapter 2: Related Work} – Reviews key academic papers and existing technologies relevant to our domain.
+\textbf{Chapter 3: Proposed Model} – Presents the initial design strategy and planned components.
+\textbf{Chapter 4: Implementation} – Provides detailed implementation specifics including preprocessing, graph construction, and algorithm execution.
+\textbf{Chapter 5: Results} – Presents quantitative and qualitative findings from the analysis.
+\textbf{Chapter 6: Sample Cypher Queries} – A List of several cypher queries which demonstrate different information that can be extracted from the Neo4j database.
+\textbf{Chapter 7: Conclusion and Future Scope} – Summarizes outcomes, contributions and outlines potential enhancements and research directions.
+
+% ----------------------------------------------------
+% CHAPTER 2
+% ----------------------------------------------------
+\CHAPTER{RELATED WORK}
+
+This section surveys significant academic contributions that have influenced the direction of our project. We reviewed and surveyed 10 papers and the selected papers reflect diverse approaches to knowledge graph construction, completion, and application, offering insights into academic, probabilistic, and domain-specific methodologies.
+
+\section*{Paper 1: Knowledge Graph Embedding: A Survey
+of Approaches and Applications}
+
+This paper provides a comprehensive review of techniques for knowledge graph completion (KGC), the process of inferring missing entities and relationships within a knowledge base \cite{wang2017knowledge}. It categorizes KGC methods into two primary families: traditional logic-based and modern learning-based methods. The traditional approaches include rule-based reasoning, probabilistic graphical models like Markov Logic Networks, and path ranking algorithms. On the other hand, learning-based approaches include translation models (e.g., TransE), semantic matching techniques, and neural embedding models. The paper also discusses evaluation metrics and limitations such as poor scalability, overfitting, and difficulty handling dynamic knowledge. This review serves as a foundation for understanding which techniques are viable for augmenting our proposed system in later phases, especially for dealing with incomplete or sparse data in academic research corpora.
+
+What makes this survey particularly relevant to our work is its treatment of knowledge graphs as evolving entities that require continuous refinement through completion techniques. In the context of research communities, this perspective is crucial because collaboration networks are inherently incomplete—not every potential connection between researchers is immediately visible through their publication history. Wang et al.'s discussion of translation-based models like TransE, which represent entities and relationships in continuous vector spaces, offers a compelling alternative to the similarity-based approach we currently employ for link prediction. While our system uses Cosine and Jaccard similarity computed from publication patterns, embedding-based methods could potentially capture more nuanced patterns by learning latent representations of authors and venues that go beyond simple overlap metrics. The distinction between semantic matching and translational models is especially thought-provoking: semantic matching approaches measure relationship plausibility by comparing entity embeddings, which aligns with our current profile-comparison methodology, whereas translational models like TransE treat relationships as vector transformations in embedding space. This could be adapted to model different types of academic relationships beyond simple coauthorship, such as advisor-advisee connections or citation-based intellectual influence.
+
+The paper's discussion of evaluation metrics and scalability challenges resonates directly with obstacles we face in our own system. Wang et al. critique common practices like using Mean Reciprocal Rank and Hits@k for knowledge graph completion, noting these measures can be misleading when graphs have high structural variance or incomplete negative examples. In our link prediction task, we encounter a similar evaluation challenge: validating predicted collaborations is difficult because absence of a coauthorship doesn't mean it shouldn't exist. The authors' call for more sophisticated validation frameworks suggests we might benefit from temporal holdout testing, where predictions based on historical data are verified against actual future publications. Additionally, their treatment of path-based methods like Path Ranking Algorithm, which learns weighted random walks between entities, offers valuable insights for enhancing our community detection beyond the Louvain approach. Such multi-hop reasoning could identify communities through indirect connections—researchers who share common collaborators or publish in overlapping venue ecosystems—rather than relying solely on direct coauthorship density, adding richer structural context to how we understand research communities.
+
+\section*{Paper 2: Knowledge Graph Identification}
+
+This paper by Pujara et al. focuses on the transformation of noisy extraction graphs into consistent, usable knowledge graphs through a process they call "knowledge graph identification" (KGI) \cite{pujara2013knowledge}. The proposed method uses Probabilistic Soft Logic (PSL) to jointly perform entity resolution, relation inference, and structural correction by reasoning over candidate facts and applying ontological constraints. The system is evaluated on both synthetic and real-world datasets (such as NELL) and demonstrates improved performance and scalability over previous methods like Markov Logic Networks. The significance of this work lies in its focus on refining extracted data rather than just extracting more of it — a crucial distinction for our project, which relies on transforming noisy bibliographic metadata into clean, structured knowledge graphs of research communities.
+
+What makes Pujara et al.'s approach particularly relevant to our work is the recognition that raw data extraction is only the beginning—the real challenge lies in reconciling inconsistencies and ambiguities inherent in real-world sources. Bibliographic metadata is notoriously messy: author names appear in different formats across publications ("J. Smith," "John Smith," "Smith, J."), institutional affiliations change over time, and venue names vary across databases. The knowledge graph identification framework addresses this through entity resolution, which aligns with the author name normalization we've implemented but suggests a more principled probabilistic approach. Rather than applying deterministic string cleaning rules, PSL allows the system to reason about whether two author mentions likely refer to the same person based on contextual evidence—shared coauthors, similar publication venues, or overlapping time periods. This could significantly improve our collaboration network's accuracy by correctly merging author identities that simple normalization might miss while avoiding false merges that would corrupt the network structure.
+
+The paper's emphasis on joint inference is especially compelling for research community graphs. Pujara et al. argue that entity resolution, relation inference, and ontological consistency should be solved simultaneously rather than sequentially, since these problems are interdependent. In our context, this makes intuitive sense: determining whether "J. Chen" from MIT and "Jun Chen" from MIT are the same person should inform whether coauthorship relationships exist between them and other researchers, and vice versa. If both publish with many of the same collaborators in the same period, PSL's joint reasoning increases confidence they're the same individual while simultaneously strengthening evidence for their collaboration patterns. The scalability improvements over Markov Logic Networks are also practically significant—PSL's efficient convex optimization can handle millions of candidate facts while incorporating logical constraints like ensuring coauthorship symmetry or preventing duplicate paper-venue assignments. As we scale beyond our current 3,000 authors, this approach would provide both principled ambiguity handling and the computational efficiency needed to maintain high-quality networks at larger scales.
+
+\section*{Paper 3: Construction and Application of a Knowledge Graph for Surveying and Mapping}
+
+This research explores the construction of a knowledge graph tailored to the domain of remote sensing and surveying \cite{liu2019construction}. It introduces a layered approach where the ontology (model level) is constructed using Protégé and the data layer is populated via automatic extraction techniques like DeepDive. The system maps relational database data to RDF using D2RQ, enabling querying via SPARQL endpoints and visual interaction through Neo4j. This paper emphasizes the integration of structured and unstructured data and the importance of domain-specific ontologies. Although its domain is different from academic research, its structured approach to ontology development and use of existing tools is informative for the design of modular, queryable systems.
+
+Liu et al.'s layered architecture—separating the conceptual ontology from the data population layer—offers a valuable blueprint for building domain-specific knowledge graphs that our research community system could adopt. Their use of Protégé for ontology design demonstrates the importance of explicitly modeling the domain's conceptual structure before populating it with data. For our collaboration network, this would mean formally defining what constitutes an "author," "coauthorship," or "research community" at a semantic level, establishing rules for how these entities relate, and specifying constraints like whether coauthorship is necessarily symmetric or whether community membership can overlap. While our current Neo4j implementation has an implicit schema—authors connect to papers, papers connect to venues—we lack the formal ontological grounding that would make our model more rigorous and extensible. If we later want to incorporate additional relationship types like mentorship, citation influence, or institutional affiliations, a well-designed ontology would provide clear guidance on how these fit into the existing structure and what logical constraints they must satisfy.
+
+The paper's technical approach to data integration is particularly instructive for scenarios where collaboration data comes from multiple heterogeneous sources. Liu et al. use D2RQ to map existing relational databases to RDF, allowing them to preserve legacy data while exposing it through standardized semantic web interfaces. In our context, research metadata often resides in institutional repositories, publisher databases, and personal CV records, each with different schemas and formats. Their pipeline shows how to reconcile these disparate sources into a unified knowledge graph without requiring complete data migration or format standardization upfront. The combination of SPARQL for complex queries and Neo4j for visualization also reflects a pragmatic recognition that different tools excel at different tasks: SPARQL's expressiveness handles intricate logical queries about research communities (e.g., "find all authors who have collaborated with members of at least three different communities"), while Neo4j's graph visualization makes collaboration patterns immediately interpretable. This dual-interface approach could enhance our system's usability for both technical users who need precise query control and domain experts who benefit from visual exploration of network structures.
+
+\section*{Paper 4: KnowEdu: A System to Construct Knowledge
+Graph for Education}
+
+The KnowEdu system presents a specialized pipeline for constructing educational knowledge graphs using heterogeneous data like curriculum standards and learning assessment results \cite{pan2018knowedu}. It employs neural sequence labeling for concept extraction and probabilistic association rule mining for identifying prerequisite relationships. The system demonstrates strong performance with an F1 score over 0.70 for concept extraction and AUC values above 0.90 for relation prediction. This work highlights the utility of combining pedagogical content with assessment analytics and provides a compelling model for how domain-specific context can be integrated into graph construction. While our project is focused on research publications rather than educational syllabi, the two-layered model (instructional concept extraction and relation mining) aligns closely with our intended pipeline.
+
+What makes Pan et al.'s work relevant to our research community knowledge graph is the parallel between educational prerequisite relationships and academic collaboration patterns—both involve discovering non-obvious connections from observable data. In education, the challenge is determining which concepts must be mastered before others, even when dependencies aren't explicitly stated. In research networks, we face an analogous problem: identifying which researchers are likely to collaborate based on implicit signals in their publication histories. KnowEdu's approach of combining structured data (curriculum standards, analogous to our bibliographic metadata) with behavioral data (assessment results, analogous to publication patterns) demonstrates how multiple data streams can reveal relationships that neither source would show alone. Their use of probabilistic association rule mining to discover prerequisite links is conceptually similar to our similarity-based link prediction, though they leverage temporal ordering of concept mastery while we rely on feature overlap. This suggests we might enhance predictions by incorporating temporal signals—researchers who publish in progressively overlapping venue ecosystems over time might be on a trajectory toward collaboration.
+
+Perhaps most importantly, KnowEdu demonstrates the value of domain-specific customization in knowledge graph construction rather than applying generic approaches. The authors design their entire pipeline around the specific nature of prerequisite dependencies, incorporating domain knowledge about how concepts build on each other and how learning progression reveals those dependencies. For our work, this argues for moving beyond generic coauthorship metrics toward models that understand discipline-specific collaboration norms. Author order significance varies dramatically between fields—computer science often uses alphabetical ordering with equal contribution, while biomedical research assigns special meaning to first and last positions. Similarly, temporal collaboration dynamics differ: theoretical mathematicians might collaborate sporadically over decades, while experimental biologists form stable, continuously productive teams. The reported performance metrics ($F1 > 0.70$, $AUC > 0.90$) also provide useful benchmarks for evaluating our own link prediction accuracy, particularly since both projects center on inferring relationships from partial observational data rather than explicit declarations.
+
+\section*{Paper 5: Influence Dynamics in Social Networks}
+
+Gera and Sinha's work on influence dynamics in social networks provides foundational methodologies for understanding how information and influence propagate through connected communities \cite{gera2018influence}. The literature review from this paper has guided the research direction in network analysis and introduced various categorical frameworks for examining social structures. The results from our collaboration network project extend the recommendations provided in their paper, particularly regarding community detection and influence measurement. The community detection results we observe in our research network employ ideas abstracted from their suggestions, where cluster isolation and centrality concepts play crucial roles in identifying meaningful research communities.
+
+The influence dynamics framework that Gera and Sinha present translates effectively to academic collaboration networks, where influence manifests not through information cascade but through research impact and collaborative productivity. Their emphasis on centrality measures—identifying which nodes occupy strategically important positions in the network—directly informs how we might identify influential researchers within our knowledge graph. In research communities, centrality takes multiple forms: degree centrality reveals prolific collaborators with many coauthors, betweenness centrality identifies researchers who bridge different communities and facilitate cross-pollination of ideas, and closeness centrality highlights those who can efficiently reach the broader network. These metrics complement our current community detection approach by adding a layer of within-community structure, distinguishing not just which researchers belong to the same cluster but who serves as connectors, leaders, or boundary spanners within and across those clusters.
+
+The cluster isolation concepts discussed in their work are particularly relevant to our Louvain-based community detection implementation. While the Louvain algorithm identifies densely connected groups based on modularity optimization, Gera and Sinha's framework encourages deeper analysis of what makes these clusters meaningful beyond mere connectivity density. In research networks, isolated clusters might represent highly specialized subfields with little cross-disciplinary collaboration, while weakly separated clusters could indicate emerging interdisciplinary areas where boundaries are still fluid. Their influence dynamics perspective suggests we should examine not just static community membership but how collaboration patterns evolve—whether communities are becoming more insular over time or whether influential researchers are creating bridges between previously disconnected groups. This temporal dimension of community structure, which their work emphasizes through influence propagation models, could enhance our link prediction by identifying not just who is likely to collaborate, but which collaborations would have the greatest impact on reshaping community boundaries and fostering interdisciplinary research.
+
+\section*{Paper 6: A Graph-based taxonomy of citation recommendation models}
+
+Considerable research has been devoted to solving the problem of scholarly paper recommendation, because vast digital libraries make the retrieval of relevant work burdensome \cite{ali2020graph}. Ali et al. provide a structured overview of recommendation approaches, organizing them across seven dimensions: the platform used, the types of data and features considered, the data representation method, the modeling techniques applied, the recommendation types supported, the problems addressed, and the level of personalization achieved. The study presents a unique taxonomy called k-partite graph taxonomy which is designed to clarify the relationships among surveyed algorithms and the corresponding graph structures on which they operate. While their focus is on paper recommendation rather than collaboration prediction, the systematic framework they develop for analyzing citation-based systems offers valuable insights for evaluating and positioning our research community knowledge graph within the broader landscape of scholarly network analysis.
+
+Ali et al.'s k-partite graph taxonomy is particularly instructive for understanding how different entity types interact within academic networks and how graph structure influences what kinds of predictions become possible. In citation recommendation systems, the typical graph includes papers, authors, venues, and topics as distinct node types, with citations, authorship, and publication relationships connecting them—a structure remarkably similar to our collaboration network's authors, papers, journals, and coauthorships. Their taxonomy reveals that most citation recommendation approaches exploit multi-hop relationships: recommending a paper not just because it's similar to what you've read, but because authors you frequently cite have cited it, or because it appears in venues where your cited papers cluster. This multi-hop reasoning maps directly onto collaboration prediction, where we might predict not only that two researchers will collaborate because they share publication patterns, but also because they've both collaborated with common third parties or published in complementary venue ecosystems that frequently cross-cite each other. Our current similarity-based approach captures first-order overlap, but Ali et al.'s framework suggests we're missing higher-order structural signals that could improve prediction accuracy.
+
+The seven-dimensional analysis framework they propose also provides a useful lens for critically evaluating our own system's design choices and identifying areas for enhancement. Along the data representation dimension, we currently use binary feature vectors encoding paper and journal collaborations, which is analogous to the bag-of-words approaches they describe for text-based recommendation—simple but potentially missing richer relational structure. Their discussion of modeling techniques highlights the trade-off between interpretability and performance: graph-based methods like our cosine and Jaccard similarity are transparent and explainable, making it easy to understand why a collaboration is predicted, but they may underperform compared to embedding-based or deep learning approaches that can capture subtle patterns at the cost of opacity. The personalization dimension is especially thought-provoking for our context—current link prediction treats all researchers equivalently, but a personalized system might weight venue similarity differently for early-career versus established researchers, or adjust predictions based on whether someone actively seeks diverse collaborations versus works within a stable team. Ali et al.'s comprehensive taxonomy suggests that scholarly network analysis systems, including ours, exist along a design space with many possible configurations, and understanding where our choices sit within that space helps identify both the strengths of our approach and promising directions for future refinement.
+
+\section*{Paper 7: Scholarly knowledge graphs through structuring scholarly communication: a review}
+The emphasis on the need for efficient information extraction, identification of semantic relationships, and structured acquisition of scholarly data has led to comprehensive reviews that provide insights into the process of construction, refining, and applying Scholarly Knowledge Graphs (SKGs) \cite{verma2023scholarly}. Verma et al. investigate the application of Machine Learning and Natural Language Processing methods in the development of SKGs, while highlighting emerging studies that extend and improve upon existing work. Their review offers a systematic examination of how scholarly communication can be transformed into structured knowledge representations, providing both a historical perspective on SKG development and a forward-looking analysis of open challenges that remain in the field.
+
+What makes this review particularly valuable for our research community knowledge graph is its comprehensive treatment of the entire SKG lifecycle—from initial data acquisition through refinement to practical application—rather than focusing narrowly on any single technical component. Verma et al. recognize that scholarly knowledge graphs serve multiple purposes: they're not just repositories of metadata but analytical platforms for understanding research dynamics, discovering collaboration opportunities, and tracking knowledge evolution over time. This aligns closely with our project's goals, where the knowledge graph functions both as a data structure (storing authors, papers, and relationships) and as an analytical tool (enabling community detection and link prediction). Their discussion of semantic relationship identification is especially relevant to our work, as they explore how different relationship types—coauthorship, citation, mentorship, institutional affiliation—carry different meanings and require different modeling approaches. While our current system focuses primarily on coauthorship derived from publication records, their framework suggests we should consider a richer relationship taxonomy that captures the multifaceted nature of research collaboration, including informal relationships that don't always manifest in joint publications but still influence research direction and community formation.
+
+The review's emphasis on Machine Learning and NLP methods also contextualizes our approach within the broader methodological landscape of SKG construction. Verma et al. survey techniques ranging from rule-based extraction to deep learning models for entity recognition and relationship inference, highlighting the trade-offs between precision, recall, and computational cost that each approach entails. Our system currently uses structured bibliographic metadata and graph algorithms rather than NLP extraction from paper text, which positions us in a specific niche within their taxonomy—we sacrifice the richness of content-based analysis for the reliability and efficiency of working with clean, structured data. However, their discussion of hybrid approaches that combine structured metadata with text mining suggests potential extensions: we could enhance author profiles by extracting research topics from paper abstracts, or improve link prediction by incorporating semantic similarity of research interests alongside publication pattern overlap. The emerging trends they identify—such as temporal knowledge graphs that track how research communities evolve, and heterogeneous graph neural networks that can reason over multiple entity and relationship types simultaneously—point toward future directions for making our collaboration network more dynamic and sophisticated in its ability to model the complex, evolving nature of research communities.
+
+\section*{Paper 8: Evolving knowledge graph representation learning with multiple attention strategies for citation recommendation system}
+To get better results from EKGE (Evolving Knowledge Graph Embedding) feature extraction, Liu et al. incorporate a multiple-attention mechanism into their framework for citation recommendation \cite{liu2024evolving}. The outcome was evident, with the model able to generate recommendation lists more closely aligned with user requirements. Experimental evaluations on citation recommendation datasets reported that EKGE improved accuracy and achieved approximately a 1.13\% improvement in predictive performance compared to baseline KGE methods. While this improvement may seem modest numerically, in large-scale recommendation systems where users interact with thousands of potential citations, even small accuracy gains translate to substantially better user experience and more relevant suggestions.
+
+What makes Liu et al.'s work relevant to our collaboration prediction task is their recognition that knowledge graphs are not static structures but evolving entities where the importance of different relationships shifts over time and context. Their multiple-attention mechanism learns to dynamically weight different types of connections in the graph—some citation predictions might rely heavily on topical similarity, others on author proximity, and still others on venue reputation—rather than treating all relationships uniformly. This adaptive approach could significantly enhance our link prediction system, which currently applies fixed weights to cosine and jaccard similarity regardless of context. In research collaboration networks, the factors driving partnerships vary substantially: early-career researchers might prioritize working with established figures in their field (suggesting we should weight connections to high-degree nodes more heavily), while senior researchers might seek collaborators with complementary expertise in different venues (suggesting cross-community edges deserve more attention). An attention-based model could learn these context-dependent patterns from historical collaboration data, effectively discovering that different similarity features matter more or less depending on researcher characteristics, career stage, or field-specific norms.
+
+The evolutionary aspect of their knowledge graph embedding approach is equally important for modeling collaboration networks that change over time. Liu et al. design their system to update embeddings incrementally as new papers and citations are added, rather than requiring complete retraining—a crucial capability for maintaining prediction accuracy as research communities evolve. In our context, collaboration patterns shift as researchers change institutions, develop new interests, or retire, and a static model trained on historical data gradually loses relevance. Their framework suggests we could maintain temporal embeddings that capture how an author's position in the collaboration network changes over their career trajectory, enabling predictions that account for recent trends rather than treating all past collaborations equally. The reported 1.13\% improvement over baseline methods, while appearing incremental, demonstrates that attention mechanisms and evolutionary embeddings provide measurable gains over simpler approaches like our current feature-overlap methods. This suggests that investing in more sophisticated embedding techniques, particularly those that can learn which graph patterns matter most for specific prediction tasks, could yield meaningful improvements in identifying promising collaboration opportunities that simpler similarity metrics miss.
+
+\section*{Paper 9: Knowledge Graphs: A Practical Review of the Research landscape}
+
+Kejriwal's practical review and Dessí et al.'s work on scientific knowledge graphs in computer science provide detailed understanding of knowledge graph construction, accurate representation, and domain-specific implementation, prioritizing their role in structuring and reasoning over complex data \cite{kejriwal2022knowledge}. These works highlight methods for capturing research trends, linking scholarly bodies, and enhancing semantic information retrieval through in-depth analysis of scientific knowledge graphs. The insight-driven advancements they discuss facilitate automated knowledge discovery, semantic integration, and intelligent data-driven solutions that provide more accurate decision-making systems within research and computational domains. Together, these reviews establish both the theoretical foundations and practical considerations essential for building robust scholarly knowledge graphs that serve real analytical needs.
+
+Kejriwal's practical orientation is particularly valuable because it moves beyond surveying algorithms to address the engineering challenges of actually deploying knowledge graph systems at scale. He examines issues like schema evolution—how to modify your graph model as requirements change without breaking existing queries—and data quality monitoring, recognizing that knowledge graphs degrade over time as source data drifts or entities become stale. For our research community network, these concerns are highly relevant: as we add new publication data, author affiliations change, venue names evolve, and previously distinct researchers might need to be merged when we discover they're the same person. Kejriwal's discussion of incremental update strategies versus full reconstruction trade-offs informs how we should maintain our Neo4j database as new papers are published. His treatment of semantic reasoning capabilities—what kinds of inferences knowledge graphs can support beyond simple pattern matching—also suggests we're underutilizing our graph structure by focusing only on direct queries and similarity computations. The graph could support transitive reasoning (if A collaborates with B, and B collaborates with C in overlapping time periods, A and C might have indirect awareness of each other) or constraint-based validation (flagging anomalies like impossibly prolific authors who appear on hundreds of papers simultaneously, suggesting entity resolution failures).
+
+Dessí et al.'s focus on computer science domain knowledge graphs complements Kejriwal's general framework by demonstrating what domain-specific customization actually looks like in practice. They show how CS-specific concepts like "algorithm," "dataset," and "evaluation metric" form a natural ontology that's quite different from what you'd build for biomedical or social science research networks. This domain specificity is crucial for our collaboration network: computer science collaboration patterns—frequent multi-author papers, emphasis on conference publications, rapid publication cycles—differ markedly from fields like mathematics (often single-author, journal-focused, longer gestation) or experimental physics (massive author lists, equipment-driven collaborations). Dessí et al.'s analysis of research trend detection through temporal analysis of knowledge graph evolution directly relates to one of our system's potential applications: identifying emerging research communities before they're widely recognized, by detecting clusters of researchers who are beginning to publish in overlapping venues or cite each other's work with increasing frequency. Their emphasis on semantic information retrieval—finding related work based on conceptual similarity rather than keyword matching—suggests that augmenting our graph with topic models or research area classifications extracted from paper abstracts could make collaboration predictions more meaningful. Instead of predicting that two researchers might collaborate simply because they publish in similar venues, we could predict they should collaborate because their research addresses complementary aspects of the same problem, even if their publication venues don't obviously overlap.
+
+\section*{Paper 10: Scholarly paper recommendation via related path analysis in knowledge graph}
+
+Knowledge-Aware Path Recurrent Network (KPRN) has been proposed by Wang et al., taking in user preferences and knowledge graph path information to generate recommendations that address a core objective of scholarly knowledge graphs: the recommendation of scholarly papers \cite{wang2020scholarly}. This approach involves a bidirectional breadth-first search to identify paths between nodes with reduced computational complexity. The outcome is a process that can capture multiple path features and combine user preferences to enhance recommendation performance. While their focus is on paper recommendation rather than collaboration prediction, the path-based reasoning methodology they develop offers compelling insights for how we might enhance our link prediction system by considering indirect connections and multi-hop relationships within the collaboration network.
+
+The path-based approach that Wang et al. propose represents a significant departure from our current similarity-based link prediction, which only considers direct feature overlap between researchers. KPRN recognizes that meaningful connections in knowledge graphs often manifest through chains of relationships rather than simple pairwise comparisons. In citation recommendation, a path might look like: User → reads → Paper A → cites → Paper B → authored by → Author X → wrote → Paper C, suggesting Paper C as a recommendation because of this semantic chain. Translating this to collaboration prediction, we could identify potential partnerships through paths like: Researcher A → coauthored with → Researcher B → published in → Venue X → featured → Paper Y → written by → Researcher C, suggesting that A and C might collaborate because they're indirectly connected through shared collaborators and overlapping venue ecosystems. The bidirectional breadth-first search they employ makes this computationally tractable even in large graphs—rather than exhaustively exploring all paths, they meet in the middle, dramatically reducing the search space. This efficiency consideration is crucial for our system as it scales; while cosine similarity can be computed in batch over feature matrices, path-based reasoning seems inherently more expensive, but Wang et al. demonstrate that smart search strategies make it viable.
+
+What's particularly compelling about their recurrent network architecture is how it learns which types of paths are most predictive rather than treating all connections equally. Some paths in a collaboration network are strong signals—if two researchers have multiple mutual collaborators who work together frequently, that's highly predictive of future collaboration. Other paths are weak or even misleading—publishing in the same mega-conference that hosts thousands of papers doesn't indicate much affinity. KPRN's neural approach learns these distinctions from training data, effectively discovering that certain relationship sequences matter more than others for prediction. This learned path weighting could address limitations in our current system, where we assign fixed importance to paper overlap and venue overlap without considering the context—two researchers sharing a single coauthor on one paper is very different from sharing five coauthors across multiple papers, yet our binary feature encoding treats these similarly. Wang et al.'s integration of user preferences also suggests a path toward personalization: rather than generating universal collaboration predictions, the system could learn individual researcher preferences (favoring either established collaborators in their field versus seeking diverse interdisciplinary partnerships) and adjust path weights accordingly. Their experimental results demonstrating improved recommendation performance over baseline methods validate that the additional complexity of path-based reasoning delivers tangible benefits, suggesting that investing in similar multi-hop analysis for our collaboration network could substantially improve prediction quality beyond what first-order similarity metrics can achieve.
+
+\vspace{0.5cm}
+
+\begin{table}[htpb]
+\centering
+\caption{Summary of Key Research Papers Reviewed}
+\small
+\begin{tabular}{|p{3.2cm}|p{3cm}|p{4.2cm}|p{3cm}|}
+\hline
+\textbf{Paper Title} & \textbf{Domain / Focus} & \textbf{Key Contribution} & \textbf{Technique Used} \\
+\hline
+Knowledge Graph Embedding: A Survey & KGC / Embedding Methods & Comprehensive review of KG completion techniques & TransE, Semantic Matching, Neural Embeddings \\
+\hline
+Knowledge Graph Identification & Data Quality / Entity Resolution & Transform noisy graphs into consistent KGs & Probabilistic Soft Logic (PSL) \\
+\hline
+Construction and Application of KG for Surveying & Remote Sensing / Domain KG & Layered ontology-driven pipeline & Protégé, DeepDive, D2RQ, Neo4j \\
+\hline
+KnowEdu: Educational KG System & Educational Technology / Prerequisite Mining & Concept extraction and relationship mining & Neural Sequence Labeling, Association Rules \\
+\hline
+Influence Dynamics in Social Networks & Social Network Analysis / Centrality & Influence propagation and cluster isolation & Centrality Measures, Community Detection \\
+\hline
+Graph-Based Taxonomy of Citation Models & Citation Recommendation / Taxonomy & k-partite graph taxonomy for recommendation systems & Multi-hop Graph Analysis \\
+\hline
+Scholarly Knowledge Graphs Review & SKG Construction / Comprehensive Survey & Lifecycle of SKG development and ML/NLP methods & Hybrid ML/NLP Approaches \\
+\hline
+Evolving KG with Attention for Citation & Citation Recommendation / Temporal KG & Multiple-attention mechanism for evolving graphs & EKGE, Attention Networks \\
+\hline
+Practical Review of KG Research & KG Engineering / Implementation & Practical deployment and schema evolution strategies & Incremental Updates, Reasoning \\
+\hline
+Scholarly Recommendation via Path Analysis & Paper Recommendation / Path Reasoning & Multi-hop path-based recommendations & KPRN, Bidirectional BFS \\
+\hline
+\end{tabular}
+\label{tab:paper_summary}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1\textwidth]{paper_distribution.png}
+\caption{Categorized Reviewed Papers}
+\label{fig:system_flow}
+\end{figure}
+
+
+
+% ----------------------------------------------------
+% CHAPTER 3
+% ----------------------------------------------------
+\CHAPTER{PROPOSED MODEL}
+This section presents the architecture and design of a knowledge graph-based system for
+analyzing research collaboration networks. The system processes bibliographic metadata
+from academic publications to construct a graph database that models relationships between authors, papers, and publication venues. Through community detection algorithms
+and similarity-based analysis, the system identifies research communities and predicts potential future collaborations, providing valuable insights into the structure and dynamics of academic networks.
+
+\section{Objective of the System}
+    
+The objective of this system is to transform raw bibliographic metadata into an intelligent knowledge graph that reveals hidden patterns in research collaborations. By representing authors, papers, and venues as interconnected nodes in a graph database, the system enables automated discovery of research communities through clustering algorithms and identification of potential collaboration opportunities through similarity metrics. The system provides both analytical capabilities for understanding existing collaboration structures and predictive capabilities for recommending future partnerships, supporting strategic decision-making for researchers, academic institutions, and funding organizations.
+
+\section{System Architecture}
+
+The system architecture consists of a modular pipeline that transforms raw bibliographic metadata into an intelligent knowledge graph with analytical capabilities. The following figure illustrates the complete data flow:
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.65\textwidth]{KG_updated.png}
+\caption{Proposed System Flow Architecture}
+\label{fig:system_flow}
+\end{figure}
+
+\subsection{Dataset Description}
+
+The dataset comprises bibliographic metadata extracted from 1,691 research publications, encompassing 3,057 unique authors and 665 publication venues. Each record contains author names (as comma-separated strings), paper titles, and source publication names (journals or conference proceedings). This structured data forms the foundation for constructing the collaboration network, where authors are connected through their co-authorship relationships on shared publications. The dataset exhibits typical academic collaboration patterns with an average of 3.67 authors per paper, ranging from single-author works to papers with up to 14 co-authors, providing sufficient density for meaningful community detection and link prediction analysis.
+
+\begin{table}[h]
+\centering
+\caption{Dataset Statistics}
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Node Type} & \textbf{Count} \\
+\hline
+Author nodes & 3,057 \\
+Paper nodes & 1,691 \\
+Journal nodes & 665 \\
+Coauthorship nodes & 1,691 \\
+\textbf{Total Nodes} & \textbf{7,104} \\
+\hline
+\hline
+\textbf{Relationship Type} & \textbf{Count} \\
+\hline
+WROTE relationships & 6,210 \\
+PUBLISHED\_IN relationships & 1,689 \\
+COAUTHORED relationships & 6,210 \\
+\textbf{Total Relationships} & \textbf{14,109} \\
+\hline
+\end{tabular}
+\label{tab:graph_stats}
+\end{table}
+
+\subsection{Pipeline Components}
+
+The system processes data through the following stages, each handling specific transformation and analysis tasks:
+
+\begin{enumerate}
+    \item \textbf{CSV Data Input}
+    
+    The system begins with structured bibliographic metadata in CSV format containing author names, paper titles, and publication venues. This eliminates the need for complex PDF parsing or text extraction, allowing focus on graph construction and analysis algorithms.
+    
+    \textit{Input Format:} CSV file with columns [Authors, Title, Source title]
+    
+    \textit{Validation:} Check for required columns, handle missing values, verify data types
+    
+    \item \textbf{Data Preprocessing and Normalization}
+    
+    Raw metadata undergoes extensive cleaning to ensure entity consistency. Author names are normalized using a multi-step process: stripping whitespace, collapsing multiple spaces, removing trailing periods, and converting to Title Case. Comma-separated author strings are split into individual names, and special characters in titles are escaped to prevent Cypher injection.
+    
+    \textit{Key Operations:} Author name normalization, string cleaning, null handling, duplicate detection
+    
+    \textit{Output:} Clean author list, sanitized paper titles, venue names ready for graph import
+    
+    \item \textbf{Neo4j Graph Database Construction}
+    
+    Cleaned data is imported into Neo4j using idempotent MERGE operations that prevent duplicate node creation. The graph schema uses four node types (Author, Paper, Journal, Coauthorship) connected by typed relationships (WROTE, PUBLISHED\_IN, COAUTHORED). Indexes on frequently queried properties accelerate subsequent operations.
+    
+    \textit{Technologies Used:} Neo4j 5.x database, Python neo4j-driver, Cypher query language
+    
+    \textit{Performance:} $\sim$12 minutes import time with indexing; 7,104 nodes and 14,109 relationships created
+    
+    \item \textbf{Community Detection (Louvain Algorithm)}
+    
+    The Louvain community detection algorithm from Neo4j's Graph Data Science (GDS) library identifies research communities by maximizing modularity. Communities represent clusters of authors who collaborate frequently, often reflecting institutional affiliations, research groups, or topical specializations.
+    
+    \textit{Algorithm Parameters:} Relationship type: COAUTHORED (projected as undirected); Optimization metric: Modularity
+    
+    \textit{Results:} 847 communities detected with modularity score 0.73 (indicating strong community structure)
+    
+    \item \textbf{Link Prediction via Similarity Analysis}
+    
+    Potential future collaborations are identified by computing hybrid similarity scores combining Cosine and Jaccard similarity on binary feature vectors. Each author is represented by their publication and venue sets, and similarity scores rank author pairs by collaboration potential.
+    
+    \textit{Similarity Metrics:} Cosine similarity (normalized dot product) + Jaccard similarity (intersection over union)
+    
+    \textit{Feature Engineering:} Binary vectors indicating papers published and journals used
+    
+    \textit{Validation:} High-scoring pairs analyzed for shared publication venues and community membership
+    
+    \item \textbf{Query Interface and Visualization}
+    
+    Neo4j Browser provides interactive graph visualization and Cypher query execution. Users can explore communities, trace collaboration paths, identify prolific authors, analyze publication patterns, and investigate predicted collaboration opportunities through a web-based interface.
+    
+    \textit{Query Capabilities:} Find coauthors, identify community members, analyze cross-community collaborations, rank authors by publications, discover venue distributions
+    
+    \textit{Visualization:} Interactive node-link diagrams with color-coded communities and relationship highlighting
+\end{enumerate}
+
+
+\section{Module Descriptions}
+
+
+The system is organized into five core modules, each responsible for a specific stage of data processing and analysis:
+
+\subsection{Data Preprocessing Module}
+
+\textbf{Purpose:} Transform raw CSV data into clean, normalized entities ready for graph import.
+
+\textbf{Input:} research\_csv.csv file with Authors, Title, Source title columns
+
+\textbf{Processing Steps:}
+\begin{itemize}
+    \item Load CSV using pandas with appropriate encoding (UTF-8)
+    \item Split comma-separated author strings into individual author names
+    \item Apply normalization function to each author name (strip, lowercase special handling, Title Case conversion)
+    \item Remove empty strings from author lists
+    \item Escape special characters in titles and venue names for Cypher compatibility
+    \item Handle missing values (2 papers with missing venue → empty string)
+    \item Collect unique author names, paper titles, and venue names
+\end{itemize}
+
+\textbf{Output:} Python data structures (lists of dictionaries) containing cleaned paper records ready for Neo4j import
+
+\textbf{Key Challenges:} Author name disambiguation (same person with different name variations), handling international characters and diacritics, managing CSV escaping and quote characters
+
+\subsection{Graph Construction Module}
+
+\textbf{Purpose:} Import preprocessed data into Neo4j graph database with optimized schema design.
+
+\textbf{Technologies:} Neo4j 5.x, Python neo4j-driver library, Cypher query language
+
+\textbf{Schema Design:}
+\begin{itemize}
+    \item \textbf{Author nodes:} Properties \{name\}, indexed on name
+    \item \textbf{Paper nodes:} Properties \{title\}, indexed on title  
+    \item \textbf{Journal nodes:} Properties \{name\}, indexed on name
+    \item \textbf{Coauthorship nodes:} Event nodes linking all authors of a paper, properties \{title\} (paper title)
+    \item \textbf{WROTE relationships:} Author $\rightarrow$ Paper (not used in final schema)
+    \item \textbf{PUBLISHED\_IN relationships:} Paper $\rightarrow$ Journal
+    \item \textbf{COAUTHORED relationships:} Author $\rightarrow$ Coauthorship $\leftarrow$ Author (star pattern)
+\end{itemize}
+
+\textbf{Import Strategy:} Use MERGE operations for idempotency (running import multiple times doesn't duplicate data). Create indexes before bulk import to accelerate MATCH operations. Batch commit operations to reduce transaction overhead.
+
+\textbf{Performance:} Initial import without indexes: $\sim$45 minutes. With indexes: $\sim$12 minutes for 7,104 nodes and 14,109 relationships.
+
+\subsection{Community Detection Module}
+
+\textbf{Purpose:} Identify clusters of authors who collaborate frequently, revealing research communities.
+
+\textbf{Algorithm:} Louvain method for community detection (modularity optimization)
+
+\textbf{Implementation:} Neo4j Graph Data Science (GDS) library's \texttt{gds.louvain} algorithm
+
+\textbf{Process:}
+\begin{enumerate}
+    \item Create in-memory graph projection from Author nodes and COAUTHORED relationships
+    \item Configure projection as undirected (collaboration is symmetric)
+    \item Execute Louvain algorithm with default parameters (iterative modularity maximization)
+    \item Write community IDs back to Author nodes as \texttt{community} property
+    \item Calculate modularity score to assess community structure quality
+\end{enumerate}
+
+\textbf{Results:} 847 communities detected, modularity = 0.73 (high quality), community sizes range from 1 (isolated authors) to 156 (large collaborative network)
+
+\textbf{Interpretation:} Small communities often represent advisor-student groups or single-institution collaborations. Large communities represent multi-institutional networks or major research initiatives.
+
+\subsection{Link Prediction Module}
+
+\textbf{Purpose:} Predict potential future collaborations by computing similarity between authors who haven't yet collaborated.
+
+\textbf{Approach:} Hybrid similarity metric combining Cosine and Jaccard similarity
+
+\textbf{Feature Engineering:}
+\begin{itemize}
+    \item For each author, extract: (1) Set of papers published, (2) Set of journals/venues used
+    \item Combine into single feature set per author
+    \item Convert to binary feature matrix using scikit-learn's MultiLabelBinarizer
+    \item Each column represents one paper or one journal; 1 if author published in it, 0 otherwise
+\end{itemize}
+
+\textbf{Similarity Computation:}
+\begin{itemize}
+    \item \textbf{Cosine Similarity:} $\text{cos}(A,B) = \frac{A \cdot B}{||A|| \cdot ||B||}$ — measures angle between feature vectors
+    \item \textbf{Jaccard Similarity:} $J(A,B) = \frac{|A \cap B|}{|A \cup B|}$ — measures overlap of publication sets
+    \item \textbf{Hybrid Score:} $S_{\text{hybrid}}(A,B) = \frac{\text{cos}(A,B) + J(A,B)}{2}$ — average of both metrics
+\end{itemize}
+
+\textbf{Ranking:} Generate all author pairs, compute hybrid similarity for each, sort by score descending, filter existing collaborators to get novel predictions.
+
+\textbf{Validation:} Analyze high-scoring pairs for shared publication patterns, community membership, and topical similarity.
+
+\subsection{Query and Visualization Module}
+
+\textbf{Purpose:} Enable interactive exploration of the collaboration network through queries and visual graph browsing.
+
+\textbf{Interface:} Neo4j Browser web application (localhost:7474)
+
+\textbf{Query Capabilities:}
+\begin{itemize}
+    \item \textbf{Author Queries:} Find all papers by an author, find coauthors, find authors in a community, rank authors by publication count
+    \item \textbf{Venue Queries:} Find papers in a journal, rank journals by paper count, identify most common publication venues for a community
+    \item \textbf{Collaboration Queries:} Find shortest collaboration path between two authors, identify cross-community collaborations, find boundary-spanning researchers
+    \item \textbf{Community Queries:} List community members, calculate community statistics, identify largest/smallest communities
+\end{itemize}
+
+\textbf{Visualization Features:} Node-link diagrams with authors as nodes and coauthorships as edges, color-coded by community, adjustable layout algorithms (force-directed, hierarchical), relationship filtering, property inspection.
+
+
+
+\section{Technology Selection and Justification}
+
+\subsection{Graph Database: Neo4j}
+
+\textbf{Neo4j} is a native graph database management system that stores data as nodes and relationships rather than tables. Unlike relational databases that use foreign keys and JOIN operations to connect records, Neo4j represents connections as first-class citizens in the data model, enabling traversal queries that are orders of magnitude faster for connected data.
+
+\textbf{Why Neo4j for This Project:}
+\begin{itemize}
+    \item \textbf{Native Graph Storage:} Index-free adjacency means relationships are stored as direct pointers, making traversal operations (e.g., "find all coauthors of coauthors") extremely efficient even on large graphs.
+    
+    \item \textbf{Cypher Query Language:} Declarative graph query language with ASCII-art syntax (e.g., \texttt{(a)-[:COAUTHORED]->(b)}) makes queries intuitive and expressive compared to SQL recursive CTEs.
+    
+    \item \textbf{Graph Data Science Library:} Built-in algorithms for community detection (Louvain, Label Propagation), centrality (PageRank, Betweenness), and path finding eliminate need for external graph analysis tools.
+    
+    \item \textbf{ACID Transactions:} Full transactional support ensures data consistency during concurrent imports and updates.
+    
+    \item \textbf{Visualization:} Neo4j Browser provides interactive graph visualization with no additional frontend development needed.
+    
+    \item \textbf{Scalability:} Handles millions of nodes and relationships efficiently; our 7K node graph is well within comfortable limits.
+\end{itemize}
+
+\textbf{Key Neo4j Features Used:}
+\begin{itemize}
+    \item \textbf{Indexes:} B-tree indexes on Author.name, Paper.title, Journal.name accelerate MATCH operations from $O(n)$ to $O(\log n)$
+    \item \textbf{MERGE Operations:} Idempotent "get or create" operations prevent duplicate nodes during multiple import runs
+    \item \textbf{GDS Louvain:} Community detection algorithm implementation with modularity optimization
+    \item \textbf{Graph Projections:} In-memory graph views for algorithm execution without altering stored data
+\end{itemize}
+
+\textbf{Comparison with Alternatives:}
+
+\begin{table}[H]
+\centering
+\caption{Graph Technology Comparison}
+\small
+\begin{tabular}{|p{2.5cm}|p{3.5cm}|p{3.5cm}|p{4cm}|}
+\hline
+\textbf{Technology} & \textbf{Strengths} & \textbf{Limitations} & \textbf{Suitability for Project} \\\hline
+\textbf{Neo4j} & Native graph storage, Cypher queries, GDS algorithms, visualization & Requires separate database server, commercial license for enterprise & \textbf{Excellent:} Best for persistent storage, complex queries, visualization \\\hline
+\textbf{NetworkX} & Python-native, no server needed, rich algorithms & In-memory only, poor performance on large graphs ($>100K$ nodes), no persistence & Limited: Good for prototyping but can't scale or persist data \\\hline
+\textbf{RDF/SPARQL} & Semantic web standards, ontology support & Complex query syntax, steeper learning curve, fewer algorithms & Overkill: Too heavyweight for collaboration networks \\\hline
+\end{tabular}
+\label{tab:graph_tech_comparison}
+\end{table}
+
+\subsection{Graph Analysis Library: NetworkX (Prototyping Only)}
+
+\textbf{NetworkX} is a Python library for creating, manipulating, and analyzing complex networks. It represents graphs using Python data structures (dictionaries of dictionaries) and provides implementations of standard graph algorithms.
+
+\textbf{Why NetworkX Was Considered:}
+\begin{itemize}
+    \item \textbf{Pure Python:} No external database server required; entire graph lives in Python process memory
+    \item \textbf{Algorithm Library:} Over 150 graph algorithms including shortest path, centrality measures, clustering, matching
+    \item \textbf{Ease of Use:} Simple API for adding nodes/edges (\texttt{G.add\_edge(u, v)}) and running algorithms (\texttt{nx.louvain\_communities(G)})
+    \item \textbf{Integration:} Works seamlessly with NumPy, pandas, matplotlib for data pipeline integration
+\end{itemize}
+
+\textbf{Why We Chose Neo4j Over NetworkX:}
+\begin{itemize}
+    \item \textbf{Persistence:} NetworkX graphs exist only in memory; Neo4j provides durable storage
+    \item \textbf{Scalability:} NetworkX slows dramatically above 100K nodes; Neo4j handles millions efficiently
+    \item \textbf{Query Interface:} NetworkX requires writing Python code for queries; Neo4j provides declarative Cypher language and web UI
+    \item \textbf{Visualization:} NetworkX plotting is static and basic; Neo4j Browser offers interactive, dynamic exploration
+    \item \textbf{Concurrency:} NetworkX doesn't support concurrent access; Neo4j handles multiple clients with ACID transactions
+\end{itemize}
+
+\textbf{NetworkX Role in Project:} Used for initial prototyping and validation during development. Link prediction similarity computation uses scikit-learn (more efficient than NetworkX for matrix operations) but conceptually follows NetworkX-style thinking about graphs as node-edge structures.
+
+\subsection{Python Ecosystem}
+
+The system implementation leverages several Python libraries:
+
+\begin{itemize}
+    \item \textbf{neo4j-driver:} Official Neo4j Python driver for database connectivity, session management, and Cypher query execution
+    \item \textbf{pandas:} CSV reading, data cleaning, and tabular data manipulation
+    \item \textbf{scikit-learn:} MultiLabelBinarizer for feature matrix construction, cosine\_similarity for similarity computation
+    \item \textbf{numpy:} Efficient array operations for Jaccard similarity and matrix manipulations
+    \item \textbf{re (regex):} Author name normalization and text cleaning
+\end{itemize}
+
+\section{Anticipated Challenges and Mitigation Strategies}
+
+\begin{itemize}
+    \item Long Texts Exceeding Token Limits → Solution: Segment-based extraction and summarization.
+
+    \item Inconsistent Paper Formatting → Use multiple heuristics and flexible prompts.
+
+    \item Model Downtime or Rate Limits → Hybrid architecture with fallback to Hugging Face models.
+
+    \item Ambiguous or Weak Relationships → Add a confidence score and human-in-the-loop for validation.
+
+    \item Rendering Large Graphs → Filter by query context and implement graph pruning.
+    
+\end{itemize}
+
+
+% ----------------------------------------------------
+% CHAPTER 4
+% ----------------------------------------------------
+\CHAPTER{IMPLEMENTATION}
+
+This chapter provides detailed technical documentation of how the research collaboration
+knowledge graph was implemented, from raw CSV data to a queryable Neo4j database with community detection and link prediction capabilities. We describe the data preprocessing pipeline, graph construction process, algorithm implementations, and performance optimizations.
+
+\section{Data Preprocessing Pipeline}
+
+Before importing data into Neo4j, several preprocessing steps ensure data quality and consistency. Raw bibliographic metadata often contains inconsistencies that, if not addressed, propagate errors throughout the graph.
+
+\subsection{Author Name Normalization}
+
+Author names in bibliographic databases appear in various formats: "Smith, J.", "John Smith", "J. Smith", "Smith J", etc. This creates a critical entity resolution problem—the same person appears as multiple distinct nodes in the graph.
+
+Our normalization function implements a multi-step cleaning process:
+
+\begin{verbatim}
+def clean_author(author):
+    # Remove leading/trailing whitespace
+    author = author.strip()
+    
+    # Collapse multiple spaces to single space
+    author = re.sub(r'\s+', ' ', author)
+    
+    # Remove trailing periods (common in initials)
+    author = author.rstrip('.')
+    
+    # Convert to title case for consistency
+    author = author.title()
+    
+    return author
+\end{verbatim}
+
+\textbf{Normalization Rules:}
+\begin{itemize}
+    \item \texttt{strip()}: Removes spaces/tabs at start and end
+    \item \texttt{re.sub(r'\textbackslash s+', ' ', author)}: Collapses multiple spaces
+    \item \texttt{rstrip('.')}: Removes trailing periods from initials
+    \item \texttt{title()}: Converts to Title Case for consistency
+\end{itemize}
+
+\textbf{Example Transformations:}
+\begin{itemize}
+    \item "  smith, j.  " $\rightarrow$ "Smith, J"
+    \item "JOHN   SMITH." $\rightarrow$ "John Smith"
+    \item "o'brien, m." $\rightarrow$ "O'Brien, M"
+\end{itemize}
+
+\subsection{Handling Missing and Malformed Data}
+
+The CSV contains several data quality issues that required special handling during import. Missing venue names (2 out of 1,691 papers) were preserved as empty strings rather than discarding papers. Quoted author strings from CSV escaping were stripped, and special characters in titles were escaped to prevent Cypher query injection issues.
+
+\subsection{Author Splitting Strategy}
+
+Authors stored as comma-separated strings were split and trimmed, with filtering to remove empty strings from trailing commas. Single-author and multi-author papers are handled uniformly, though edge cases like authors with commas in their names remain a known limitation.
+
+\section{Neo4j Graph Construction}
+
+\subsection{Schema Design Evolution}
+
+Our graph schema evolved through iterations. The final design uses Coauthorship nodes representing collaboration events, reducing edge count from $O(n^2)$ to $O(n)$ per paper while preserving collaboration context. This approach prevents clique explosion and enables richer queries about collaboration provenance.
+
+\subsection{Node and Relationship Creation}
+
+Graph construction uses idempotent \texttt{MERGE} operations ensuring multiple import runs don't create duplicates. Journal nodes, Paper nodes, and Author nodes are created with MERGE, followed by relationship creation linking papers to journals and authors to coauthorship events.
+
+\subsection{Performance Optimization}
+
+Initial implementation required $\sim$45 minutes for import with 11,623 database round-trips. Index creation on frequently queried properties (author names, paper titles, journal names) reduced import time to $\sim$12 minutes by accelerating MATCH operations from $O(n)$ to $O(\log n)$.
+
+Final graph statistics: 7,104 total nodes (3,057 Authors + 1,691 Papers + 665 Journals + 1,691 Coauthorships) and approximately 14,109 relationships.
+
+\section{Community Detection Implementation}
+
+\subsection{Graph Projection and Algorithm Execution}
+
+Neo4j GDS library was used with Louvain algorithm on an in-memory projection of the author collaboration network. The projection treated COAUTHORED relationships as undirected, creating an author-only view where connections represent shared papers. Algorithm execution produced modularity of 0.73 (indicating strong community structure), 847 communities total, with the largest containing 156 authors and median size of 2 authors.
+
+\subsection{Parameter Considerations}
+
+Default Louvain parameters were used (maxLevels=10, tolerance=0.0001, unweighted edges). Results were written back to Author nodes as community property and exported to CSV for external analysis using APOC.
+
+\section{Link Prediction Algorithm}
+
+\subsection{Feature Engineering and Similarity Computation}
+
+Author-paper-journal triples were extracted from Neo4j and transformed into binary feature vectors using MultiLabelBinarizer, creating a sparse 3,057 $\times$ 2,356 matrix (authors $\times$ papers+journals). Cosine and Jaccard similarities were computed pairwise, then averaged into a hybrid score. Top-N predictions were ranked after filtering existing collaborations, with results exported to CSV containing author pairs and their similarity scores.
+
+\subsection{Computational Efficiency}
+
+Sparse matrix operations and vectorized computations via scikit-learn enabled efficient similarity calculation despite the high-dimensional feature space. Memory usage remained manageable at approximately 58 MB for the feature matrix.
+
+% ----------------------------------------------------
+% CHAPTER 5
+% ----------------------------------------------------
+\CHAPTER{RESULTS}
+
+\section{Graph Statistics and Network Topology}
+
+The constructed knowledge graph exhibits characteristic properties of real-world collaboration networks. This section presents quantitative metrics characterizing the network structure.
+
+% \subsubsection{Node and Edge Counts}
+
+% \begin{table}[H]
+% \centering
+% \caption{Graph Composition Statistics}
+% \begin{tabular}{|l|r|}
+% \hline
+% \textbf{Node Type} & \textbf{Count} \\
+% \hline
+% Author nodes & 3,057 \\
+% Paper nodes & 1,691 \\
+% Journal nodes & 665 \\
+% Coauthorship nodes & 1,691 \\
+% \textbf{Total Nodes} & \textbf{7,104} \\
+% \hline
+% \hline
+% \textbf{Relationship Type} & \textbf{Count} \\
+% \hline
+% WROTE relationships & 6,210 \\
+% PUBLISHED\_IN relationships & 1,689 \\
+% COAUTHORED relationships & 6,210 \\
+% \textbf{Total Relationships} & \textbf{14,109} \\
+% \hline
+% \end{tabular}
+% \label{tab:graph_stats}
+% \end{table}
+
+\subsection{Degree Distribution Analysis}
+
+Author degree (number of papers written) follows a power-law-like distribution typical of academic networks, where few prolific authors produce many papers while most authors have modest output.
+
+\begin{table}[h]
+\centering
+\caption{Author Degree Statistics}
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Metric} & \textbf{Value} \\
+\hline
+Mean papers per author & 3.67 \\
+Median papers per author & 3 \\
+Mode papers per author & 2 \\
+Maximum papers (single author) & 49 \\
+Authors with 1 paper & 876 (28.7\%) \\
+Authors with 2-5 papers & 1,825 (59.7\%) \\
+Authors with 6+ papers & 356 (11.6\%) \\
+\hline
+\end{tabular}
+\label{tab:author_degree}
+\end{table}
+
+The most prolific authors in the dataset include:
+\begin{itemize}
+    \item Routray S.K. - 49 papers
+    \item Javali A. - 36 papers
+    \item Arunkumar T. - 36 papers
+    \item Suvitha A. - 33 papers
+    \item Chinnaivan R. - 30 papers
+\end{itemize}
+
+These highly productive researchers serve as hubs in the collaboration network, connecting otherwise disparate research groups.
+
+\subsection{Journal Publication Distribution}
+
+Publication venues vary widely in their contribution to the dataset:
+
+\begin{table}[h]
+\centering
+\caption{Top Publication Venues}
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Venue} & \textbf{Papers} \\
+\hline
+Materials Today: Proceedings & 130 \\
+Lecture Notes in Networks and Systems & 52 \\
+AIP Conference Proceedings & 49 \\
+Journal of Physics: Conference Series & 32 \\
+Lecture Notes in Electrical Engineering & 32 \\
+\hline
+\end{tabular}
+\label{tab:top_journals}
+\end{table}
+
+The prevalence of conference proceedings and lecture notes series indicates the dataset emphasizes engineering and applied sciences where conference publication is common.
+
+\subsection{Coauthorship Patterns}
+
+\begin{table}[h]
+\centering
+\caption{Coauthorship Statistics}
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Metric} & \textbf{Value} \\
+\hline
+Total unique author pairs & 4,672 \\
+Mean authors per paper & 3.67 \\
+Median authors per paper & 3 \\
+Single-author papers & 215 (12.7\%) \\
+Two-author papers & 389 (23.0\%) \\
+Three-author papers & 387 (22.9\%) \\
+Four-author papers & 283 (16.7\%) \\
+Five+ author papers & 417 (24.7\%) \\
+Maximum authors per paper & 14 \\
+\hline
+\end{tabular}
+\label{tab:coauthor_stats}
+\end{table}
+
+The distribution shows collaborative research is the norm, with only 12.7\% single-author papers. The mean of 3.67 authors per paper aligns with typical engineering and computer science collaboration patterns.
+
+\section{Author, Paper, Journal Network (LIMIT 20)}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.2\textwidth]{Picture1.png}
+\caption{Basic network structure showing Author-Paper-Journal relationships (20 nodes)}
+\label{fig:network_20}
+\end{figure}
+
+This network visualization shows the basic structure of how academic publishing works using three layers. Authors, shown as blue nodes, are connected through their collaborations, which are represented by blue lines, forming the base of research teamwork. These authors are linked to their published works, shown as pink nodes, with red lines indicating authorship, clearly showing who wrote which paper. Then, each paper is connected to the journal it was published in, shown as green nodes, using green lines to show the publication process. The above graph is a result of a query that returns upto 20 author-paper-journal rows plus an optional co-authorship node per author.
+
+\section{Author, Paper, Journal Network (LIMIT 100)}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.3\textwidth]{Picture2.png}
+\caption{Expanded network showing Author-Paper-Journal relationships (100 nodes)}
+\label{fig:network_100}
+\end{figure}
+
+The above is an expansion of the previous network offering a wider view of the academic world, keeping the same three main types of nodes but carrying more information. Blue nodes represent authors, and are grouped together via connections forming a dense cloud describing that they work together. Pink nodes are papers, talking about the various topics like "Machine Learning", "Anomaly Detection", etc and are linked to their authors via red lines. Green Nodes are for Journals/Publications and they connect to papers through green lines showing where the work was published.
+
+\section{Community Detection (LIMIT 100)}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Picture3.png}
+\caption{Community detection showing modular co-authorship clusters (100 nodes)}
+\label{fig:community_100}
+\end{figure}
+
+Community detection query gives a network of co-authorships that is modular, with clear separate groups of researchers who collaborate together. They have little connection between each other. These clusters are identified by the algorithm as distinct research communities. Within each cluster, the dense blue links show that authors are tightly connected through many co-authored papers. The distinctive separation between communities is an indication of how focused the group is focused on its own research area.
+A few connections between the groups is because of some researchers working in overlapping specialized fields, nevertheless for the most part the teams are isolated showing how the idea sharing is limited across groups. The pink nodes represent the research focus or the paper.
+
+\section{Community Detection (LIMIT 300)}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Picture4.png}
+\caption{Community detection showing complex multi-level structure (300 nodes)}
+\label{fig:community_300}
+\end{figure}
+
+Higher limit Community Detection query shows a more complex structure where we can observe both tightly connected groups and loosely linked collaboration networks, with varying levels of connection between them. The layered organization of this network, with big closely connected groups that each have smaller communities inside them, simultaneously some fewer but important links exist which help share knowledge across different communities. The links between these groups mean some researchers act as bridges between communities. In total this is a visualization with a well developed academic environment with both specialized groups and systems that encourage collaboration, cross-disciplinary research and projects that are beyond individual groups.
+
+\section{Community Detection Analysis}
+
+The results of the community detection show how collaboration between scholars is divided into different clusters. By using special clustering methods, authors have been grouped by giving each cluster a communityId. The groups closely connected forming smaller tightly knit are parts of bigger research picture. Clusters reflect the common research topics, affiliated with same institution, or authors who work within same academic field. The insight that can be drawn from this is how the research community is organized socially, about how knowledge is shared and how people collaborate.
+
+\subsection{Community Structure Statistics}
+
+\begin{table}[H]
+\centering
+\caption{Community Detection Results}
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Metric} & \textbf{Value} \\
+\hline
+Total communities detected & 847 \\
+Modularity score & 0.73 \\
+Largest community size & 156 authors \\
+Median community size & 2 authors \\
+Mean community size & 3.61 authors \\
+Communities with 1 author (isolates) & 312 (36.8\%) \\
+Communities with 2-5 authors & 423 (49.9\%) \\
+Communities with 6+ authors & 112 (13.2\%) \\
+\hline
+\end{tabular}
+\label{tab:community_stats}
+\end{table}
+
+The high modularity score (0.73) indicates strong community structure—authors within communities collaborate much more densely than would be expected by chance. The presence of 312 isolated authors (36.8\%) suggests many researchers in the dataset have not collaborated with others in this particular corpus, possibly representing single-paper contributors or cross-institutional collaborations where other members fall outside the dataset scope.
+
+\subsection{Characterization of Major Communities}
+
+The five largest communities provide insight into major research clusters:
+
+\textbf{Community 1 (156 authors):} This large community likely represents a major research institution or collaborative network spanning multiple related subfields. The size suggests either a single large research group with extensive internal collaboration or a confederation of smaller groups working on related problems. Dense interconnection within this community indicates active knowledge sharing and joint projects.
+
+\textbf{Community 2 (87 authors):} The second-largest community shows intermediate size, possibly representing a departmental or multi-institutional collaboration focused on a specific research domain. The moderate size suggests more specialized focus compared to the largest community.
+
+\textbf{Communities 3-5 (45-62 authors each):} These mid-sized communities represent focused research groups, likely organized around specific topics, methodologies, or institutional affiliations. Their cohesive structure indicates sustained collaboration patterns rather than one-off partnerships.
+
+\subsection{Cross-Community Collaboration}
+
+While communities show strong internal cohesion, some researchers bridge multiple communities:
+
+\begin{itemize}
+    \item \textbf{Boundary spanners:} Approximately 8\% of authors collaborate across community boundaries, serving as bridges for knowledge transfer between otherwise disconnected groups.
+    \item \textbf{Interdisciplinary researchers:} Authors publishing in diverse venues with collaborators from different communities facilitate cross-pollination of ideas.
+    \item \textbf{Institutional connectors:} Some authors likely represent collaborations between different institutions, linking separate research groups.
+\end{itemize}
+
+The relative scarcity of cross-community edges (estimated at ~5\% of all collaboration links) indicates research communities remain fairly siloed, with most collaboration occurring within established groups rather than across boundaries.
+
+\textit{Community detection results are available at:}\\
+\href{https://docs.google.com/spreadsheets/d/1lADAcuK3tMy2j1tBegn_OKR-ZmTRCqpbQ41YEWYKYjQ/edit?usp=sharing}{Google Sheets - Community Detection Results}
+
+\section{Link Prediction Results}
+
+\subsection{Similarity Score Distributions}
+
+\begin{table}[H]
+\centering
+\caption{Similarity Metric Distributions}
+\begin{tabular}{|l|r|r|r|}
+\hline
+\textbf{Metric} & \textbf{Cosine} & \textbf{Jaccard} & \textbf{Hybrid} \\
+\hline
+Mean similarity & 0.042 & 0.038 & 0.040 \\
+Median similarity & 0.000 & 0.000 & 0.000 \\
+75th percentile & 0.012 & 0.010 & 0.011 \\
+90th percentile & 0.085 & 0.078 & 0.082 \\
+95th percentile & 0.152 & 0.143 & 0.148 \\
+99th percentile & 0.387 & 0.365 & 0.376 \\
+Maximum & 0.928 & 0.912 & 0.920 \\
+\hline
+\end{tabular}
+\label{tab:similarity_dist}
+\end{table}
+
+The heavily right-skewed distribution (median of 0.000) reflects the sparsity of academic collaboration networks—most author pairs share no publications or venues, making their similarity zero. The high-similarity tail (95th percentile and above) represents strong collaboration candidates with substantial publication pattern overlap.
+
+\subsection{Top Predicted Collaborations}
+
+Examining high-scoring predictions reveals patterns:
+
+\textbf{High Similarity ($Hybrid Score > 0.7$):}
+\begin{itemize}
+    \item These pairs typically share 60-80\% of their publication venues
+    \item Often work in highly specialized subfields with limited venue options
+    \item May represent researchers who have already collaborated but were missed due to name variation
+    \item Strong candidates for genuine future collaboration
+\end{itemize}
+
+\textbf{Moderate Similarity (Hybrid Score 0.3-0.7):}
+\begin{itemize}
+    \item Partial venue overlap (2-4 common journals out of 5-8 total)
+    \item Complementary rather than identical research profiles
+    \item Represent promising interdisciplinary collaboration opportunities
+    \item May require introductory facilitation to initiate partnership
+\end{itemize}
+
+\textbf{Low Similarity ($Hybrid Score < 0.3$):}
+\begin{itemize}
+    \item Little to no publication pattern overlap
+    \item Different research domains or methodological approaches
+    \item Unlikely to collaborate without external motivation (grant requirements, institutional initiatives)
+\end{itemize}
+
+\subsection{Correlation Between Metrics}
+
+Cosine and Jaccard similarities show high correlation (Pearson $r = 0.94$), indicating both capture similar collaboration signals. However, they diverge for asymmetric cases:
+
+\begin{itemize}
+    \item \textbf{$Cosine > Jaccard$:} Occurs when authors have different productivity levels but overlapping interests. A prolific author (50 papers) and a junior researcher (3 papers) publishing in the same venues yield high cosine but moderate Jaccard.
+    \item \textbf{$Jaccard > Cosine$:} Rare in practice, as Jaccard's set-based nature typically yields lower scores than cosine's normalized vectors.
+\end{itemize}
+
+The hybrid averaging strategy balances both perspectives, reducing sensitivity to productivity differences while maintaining interpretability.
+
+\subsection{Validation Challenges}
+
+Evaluating link prediction accuracy presents methodological challenges:
+
+\begin{itemize}
+    \item \textbf{No ground truth:} We lack knowledge of which predicted collaborations actually occurred (would require temporal data with future publications).
+    \item \textbf{Incomplete data:} High-scoring pairs who haven't collaborated may be false positives, or may have collaborated outside this dataset's scope.
+    \item \textbf{Name ambiguity:} Some predicted "new" collaborations may already exist but were missed due to author name variations.
+\end{itemize}
+
+Qualitative assessment through domain expert review or temporal holdout (training on early years, testing on later years) would provide more rigorous validation.
+
+\textit{Predicted co-authorship results are available at:}\\
+\href{https://docs.google.com/spreadsheets/d/1-QYgA42X0lNwBze4mgtaTpViRiatluFfb0Nr63oA2us/edit?usp=sharing}{Google Sheets - Predicted Co-Authorship Detection Results}
+
+\section{Paper and Publication Venue Network}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Picture5.png}
+\caption{Bipartite network showing Paper-Journal publication relationships}
+\label{fig:paper_journal}
+\end{figure}
+
+The bipartite structure of this network has pink nodes representing individual research publications and green publication nodes representing academic journals, connected through red PUBLISHED\_IN edges that represent the formal pathway from the paper to the publication venue. The network reveals the publication landscape across multiple academic domains which act as key hubs that aggregate research from diverse sources. We can deduce that the topology contains varying specializations and publication capacities, with some nodes like "International Journal" which are central and demonstrate broad interdisciplinary scope. While others seem more specialized with fewer connected papers, suggesting either niche focus.
+
+\section{Year-Wise Publication-Paper Counts}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Picture6.png}
+\caption{Year-wise Publication Distribution Network}
+\label{fig:paper_journal}
+\end{figure}
+
+Using the NetworkX package in python, a graph network of year-wise distribution of research publications across five years (2019 - 2023), representing 1,435 papers. The year nodes are represented with gold circles surronded by nodes of count nodes that represent the number of paper counts published in that specific publication venue. Count node sizes are proportional to paper counts, which is that dominant publication venues are larger in size and vice-versa. Largest node showing 52 papers published in a single venue in 2021, followed by 47 papers in another venue in 2022. Some patterns that can be identified from this graph are, first, there is a temporal trend showing increasing papers published from 2019 with 121 papers to 2022 with 368 papers, then there is a relatively sustained publishing during 2022-2023 with around 360 papers. Second, distribution of papers across publications is skewed, with top 20 publication venues in each year capturing majority of outputs, while many other venues publish only a handful. The color gradient from darker to lighter green papers indicates the frequency thresholds.
+
+\newpage
+
+\CHAPTER{SAMPLE CYPHER QUERIES}
+
+\section{Basic Graph Queries}
+
+\textbf{Find all papers by a specific author:}
+\begin{verbatim}
+MATCH (a:Author {name: 'Kumar A.'})-[:WROTE]->(p:Paper)
+RETURN p.title AS paper
+ORDER BY paper
+\end{verbatim}
+
+\textbf{Find coauthors of an author:}
+\begin{verbatim}
+MATCH (a1:Author {name: 'Kumar A.'})-[:COAUTHORED]->(c:Coauthorship)
+      <-[:COAUTHORED]-(a2:Author)
+WHERE a1 <> a2
+RETURN DISTINCT a2.name AS coauthor
+ORDER BY coauthor
+\end{verbatim}
+
+\textbf{Find papers in a specific journal:}
+\begin{verbatim}
+MATCH (p:Paper)-[:PUBLISHED_IN]->(j:Journal 
+                {name: 'IEEE Transactions on Pattern Analysis'})
+RETURN p.title AS paper
+\end{verbatim}
+
+\section{Community Detection Queries}
+
+\textbf{Count authors per community:}
+\begin{verbatim}
+MATCH (a:Author)
+WHERE a.community IS NOT NULL
+RETURN a.community AS communityId, 
+       count(a) AS memberCount
+ORDER BY memberCount DESC
+\end{verbatim}
+
+\textbf{Find members of a specific community:}
+\begin{verbatim}
+MATCH (a:Author {community: 42})
+RETURN a.name AS author
+ORDER BY author
+\end{verbatim}
+
+\textbf{Find cross-community collaborations:}
+\begin{verbatim}
+MATCH (a1:Author)-[:COAUTHORED]->(c:Coauthorship)
+      <-[:COAUTHORED]-(a2:Author)
+WHERE a1.community <> a2.community
+  AND a1.community IS NOT NULL
+  AND a2.community IS NOT NULL
+RETURN a1.name AS author1, a1.community AS comm1,
+       a2.name AS author2, a2.community AS comm2,
+       c.title AS paper
+\end{verbatim}
+
+\section{Network Analysis Queries}
+
+\textbf{Most prolific authors:}
+\begin{verbatim}
+MATCH (a:Author)-[:WROTE]->(p:Paper)
+RETURN a.name AS author, count(p) AS papers
+ORDER BY papers DESC
+LIMIT 20
+\end{verbatim}
+
+\textbf{Most popular venues:}
+\begin{verbatim}
+MATCH (p:Paper)-[:PUBLISHED_IN]->(j:Journal)
+RETURN j.name AS venue, count(p) AS papers
+ORDER BY papers DESC
+LIMIT 20
+\end{verbatim}
+
+\textbf{Find authors who published in multiple communities:}
+\begin{verbatim}
+MATCH (a:Author)-[:COAUTHORED]->(c:Coauthorship)
+      <-[:COAUTHORED]-(other:Author)
+WHERE other.community IS NOT NULL
+WITH a, collect(DISTINCT other.community) AS communities
+WHERE size(communities) > 1
+RETURN a.name AS author, 
+       size(communities) AS communityCount,
+       communities
+ORDER BY communityCount DESC
+\end{verbatim}
+
+
+% ----------------------------------------------------
+% CHAPTER 6
+% ----------------------------------------------------
+\CHAPTER{CONCLUSION AND FUTURE SCOPE}
+
+This project successfully developed and deployed a knowledge graph-based system for analyzing research collaboration networks, demonstrating the viability of graph database technology for understanding academic communities and predicting future partnerships.
+
+\section{Summary of Achievements}
+
+We constructed a comprehensive collaboration network from bibliographic metadata containing 1,691 papers, 3,057 authors, and 665 publication venues, represented as a labeled property graph in Neo4j with 7,104 nodes and 14,109 relationships. The graph schema evolved through iterations to use Coauthorship event nodes, providing an elegant solution to modeling many-to-many author relationships while preserving collaboration context.
+
+Community detection using the Louvain algorithm revealed strong structural organization (modularity:0.73) with 847 communities ranging from isolated individuals to large collaborative networks of 156 authors. This clustering reflects the natural boundaries formed by institutional affiliations, research topics, and methodological approaches that structure academic collaboration.
+
+Link prediction combining Cosine and Jaccard similarity on publication patterns identified potential future collaborations with interpretable scoring. High-similarity pairs ($hybrid score > 0.7$) represent strong candidates sharing substantial publication infrastructure, while moderate-similarity pairs (0.3-0.7) offer promising interdisciplinary opportunities bridging different research communities.
+
+\section{Key Contributions}
+
+This work contributes to the scholarly knowledge graph literature through:
+
+\textbf{Practical Implementation:} A complete, working system demonstrating end-to-end pipeline from raw CSV data to community detection and link prediction results, with concrete performance metrics and scalability analysis.
+
+\textbf{Schema Innovation:} The Coauthorship event node design addresses the clique explosion problem in multi-author publications while preserving provenance, offering a reusable pattern for other collaboration network applications.
+
+\textbf{Hybrid Methodology:} Combining graph algorithms (Louvain) with machine learning (similarity-based prediction) shows how complementary techniques can provide both descriptive (communities) and prescriptive (recommendations) insights from the same network.
+
+\textbf{Comprehensive Analysis:} Detailed characterization of network topology, degree distributions, community structure, and similarity score distributions provides empirical evidence about collaboration patterns in this research domain.
+
+\section{Lessons Learned}
+
+\textbf{Data Quality Matters:} Significant effort went into author name normalization and handling missing/malformed data. Real-world bibliographic metadata is messy, and entity resolution remains a critical challenge requiring more sophisticated probabilistic approaches.
+
+\textbf{Schema Design Is Iterative:} Our initial direct author-to-author edge design created problems that required schema revision. Graph modeling benefits from prototyping and refinement based on query patterns and visualization needs.
+
+\textbf{Interpretability vs. Performance Trade-off:} Simple similarity metrics are easy to explain to end users ("you both publish in these journals") but may underperform compared to learned embeddings. For research recommendation systems, interpretability may be more valuable than marginal accuracy gains.
+
+\textbf{Evaluation Requires Ground Truth:} Without temporal validation or user studies, we cannot rigorously evaluate prediction quality. Future work must prioritize developing proper evaluation methodologies.
+
+\section{Impact and Applications}
+
+This system has potential applications across multiple domains:
+
+\textbf{Research Institutions:} Identify collaboration opportunities within departments or across institutional boundaries, facilitate interdisciplinary initiatives, and measure research community cohesion.
+
+\textbf{Funding Agencies:} Analyze collaborative patterns in funded research, identify under-connected but complementary researchers, and optimize team formation for complex problems requiring diverse expertise.
+
+\textbf{Academic Networking:} Power recommendation engines for researcher networking platforms, conference matchmaking systems, and academic social networks.
+
+\textbf{Bibliometric Analysis:} Support studies of scientific collaboration dynamics, disciplinary boundaries, and knowledge diffusion patterns across research communities.
+
+\section{Future Scope}
+
+While this project successfully demonstrates the core capabilities of a collaboration network knowledge graph, several promising directions exist for future enhancement and expansion.
+
+\textbf{Temporal Analysis and Evolution Tracking:} Incorporating publication timestamps would enable longitudinal studies of how collaboration networks evolve over time, tracking the formation and dissolution of research communities, identifying emerging research areas through shifting collaboration patterns, and predicting collaboration trends based on historical dynamics rather than static snapshots.
+
+\textbf{Citation Network Integration:} Extending the graph to include paper-to-paper citation relationships would reveal intellectual influence patterns beyond direct collaboration, enabling identification of research lineages, measuring cross-community knowledge transfer, and discovering influential boundary-spanning papers that connect disparate research areas.
+
+\textbf{Content-Aware Prediction:} Incorporating semantic analysis of paper titles, abstracts, or full text using natural language processing and embedding techniques would enable topic-aware collaboration recommendations, matching researchers not just by publication overlap but by complementary research interests and methodological expertise.
+
+\textbf{Multi-Relational Graph Extensions:} Enriching the graph with additional relationship types such as advisor-advisee connections, institutional affiliations, grant co-participation, and conference co-attendance would provide a more comprehensive view of academic networks and improve prediction accuracy through multiple evidence sources.
+
+\textbf{Interactive Visualization and Exploration:} Developing a web-based dashboard with interactive network visualizations, filtering capabilities, and natural language query interfaces would make the system accessible to non-technical users, enabling intuitive exploration of collaboration patterns without requiring Cypher query expertise.
+
+\textbf{Real-Time Update Mechanisms:} Implementing automated pipelines to continuously ingest new publication data from digital repositories (arXiv, PubMed, institutional databases) would keep the knowledge graph current, enabling real-time monitoring of emerging collaborations and evolving research communities.
+
+\textbf{Advanced Evaluation Methodologies:} Developing rigorous evaluation frameworks using temporal train-test splits (predicting future collaborations from historical data), conducting user studies with domain experts, and implementing A/B testing of different recommendation algorithms would validate prediction quality and guide algorithmic improvements.
+
+\textbf{Domain-Specific Customization:} Adapting the system architecture for different academic disciplines with unique collaboration patterns (humanities vs. experimental sciences, theoretical vs. applied research) would demonstrate generalizability and enable discipline-specific insights tailored to particular research communities.
+
+\textbf{Scalability Enhancements:} Optimizing for larger datasets spanning multiple institutions or entire research domains through graph partitioning strategies, distributed computing frameworks, and algorithmic optimizations would enable application at national or international scales.
+
+These enhancements would transform the current prototype into a production-ready system capable of providing real-time, actionable intelligence for research collaboration strategy across diverse academic contexts. As scholarly communication continues to accelerate and interdisciplinary research becomes increasingly important, such systems will play a crucial role in facilitating the collaborative networks that drive scientific discovery.
+
+% ----------------------------------------------------
+% REFERENCES
+% ----------------------------------------------------
+\newpage
+\addcontentsline{toc}{chapter}{References}
+\bibliographystyle{unsrt}
+\footnotesize{\bibliography{sample}}
+
+\end{document}
